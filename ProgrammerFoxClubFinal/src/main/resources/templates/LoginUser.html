@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LoginUser</title>
+</head>
+<body>
+<h1>Programmer Fox Club</h1>
+<h2>Login User</h2>
+<form method="POST" th:action="@{/loginUser}">
+  <div class='form-row'>
+    <label class="" for="name">Enter Username:</label>
+    <input type="text" id="name" name="name">
+    <label class="" for="password">Enter password:</label>
+    <input type="text" id="password" name="password">
+    <button class="submitButton" type="submit" >GO</button>
+  </div>
+</form>
+<br>
+<a href="/foxclub">BACK TO MAIN PAGE</a><br>
+<img src="greenfox.png" alt="greenFox"><br>
+<a href="/foxclub">BACK TO MAIN PAGE</a><br>
+</body>
+</html>

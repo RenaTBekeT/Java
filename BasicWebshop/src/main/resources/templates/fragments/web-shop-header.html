@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Myshop</title>
+  <link rel='stylesheet' href="/Users/renat_beket/Renatbeket1/Week-16/BasicWebshop/src/main/resources/static/styles.css">
+</head>
+<body>
+<header class='web-shop-header'>
+  <ul>
+    <li style="display:inline-block;">
+      <a class="web-shop-h1" style="text-decoration: none; " href="webshop">
+        <h1>My Shop</h1>
+      </a>
+    </li>
+    <li style="display:inline-block;">
+      <a class="moreLink" style="text-decoration: none; " href="webshop">
+        <h1>More</h1>
+      </a>
+    </li>
+  </ul>
+  <hr class="styled-line">
+  <div>
+    <a href="only-available">
+      <button class="buttonsSmall">ONLY AVAILABLE</button>
+    </a>
+    <a href="cheapest-first">
+      <button class="buttonsSmall">CHEAPEST FIRST</button>
+    </a>
+    <a href="contains-nike">
+      <button class="buttonsSmall">CONTAINS NIKE</button>
+    </a>
+    <a href="average-stock">
+      <button class="buttonsSmall">AVERAGE STOCK</button>
+    </a>
+    <a href="most-expensive">
+      <button class="buttonsSmall">MOST EXPENSIVE</button>
+    </a>
+  </div>
+  <form method="POST" th:action="@{/found}">
+    <div class='form-row'>
+      <div>
+        <label class="searchLabel" for="name">Search for:</label>
+      </div>
+      <input type="text" id="name" name="name" required placeholder="...something like nike">
+      <button class="submitButton" type="submit">search</button>
+    </div>
+  </form>
+</header>
+</body>
+</html>

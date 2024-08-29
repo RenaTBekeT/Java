@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <link rel='stylesheet' href='styles.css'/>
+</head>
+<body>
+<h1>Programmer Fox Club</h1>
+<h2 th:text="'USER ' + ${users.username}"></h2>
+<form th:action="@{'/nutritionStore?name=' + ${name}}" method="post">
+    <label for="food">Food </label>
+    <select id="food" name="food">
+        <option value="pizza">Pizza</option>
+        <option value="McDonald's">McDonald's</option>
+        <option value="Nachos">Nachos</option>
+    </select>
+    <label for="drink">Drink </label>
+    <select id="drink" name="drink">
+        <option value="lemonade">Lemonade</option>
+        <option value="Coca-cola">Coca-cola</option>
+        <option value="Monster Energy">Monster Energy</option>
+        <option value="Monster Energy">Orange Juice</option>
+    </select>
+    <input type="submit">
+</form><br>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+    </tr>
+    <tr><td th:text="${users.id}"></td>
+        <td th:text="${users.username}"></td>
+        <td th:text="${foxes}"></td>
+    </tr>
+</table>
+<img src="greenfox.png" alt="greenFox"><br>
+<a th:href="@{'/nutritionStore?name=' + ${users.getUsername()}}">Nutrition Store</a><br>
+<a th:href="@{'/setTricks?name=' + ${users.getUsername()}}">Set new tricks</a><br>
+<a th:href="@{'/setName?name=' + ${users.getUsername()}}">Set New Name</a>
+<br>
+<br>
+<a href="/foxclub">SIGN OUT</a><br>
+<H1>Known tricks</H1>
+</body>
+</html>

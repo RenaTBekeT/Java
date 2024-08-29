@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+<h1>Programmer Fox Club</h1>
+<h2>Registration Page</h2>
+<form method="POST" th:action="@{/register}">
+  <div class='form-row'>
+    <label class="" for="name">Select Username:</label>
+    <input type="text" id="name" name="name">
+    <label class="" for="password">Select password:</label>
+    <input type="text" id="password" name="password">
+    <button class="submitButton" type="submit" >GO</button>
+  </div>
+</form>
+<br>
+<img src="greenfox.png" alt="greenFox"><br>
+<a href="/foxclub">BACK TO MAIN PAGE</a><br>
+</body>
+</html>

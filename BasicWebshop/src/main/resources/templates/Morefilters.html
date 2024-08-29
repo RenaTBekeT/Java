@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Myshop</title>
+    <link rel='stylesheet' href='/styles.css'/>
+</head>
+<body>
+<header class='web-shop-header'>
+    <ul>
+        <li style="display:inline-block;">
+            <a class="web-shop-h1" style="text-decoration: none; " href="webshop">
+                <h1>My Shop</h1>
+            </a>
+        </li>
+        <li style="display:inline-block;">
+            <a class="moreLink" style="text-decoration: none; " href="more-filters">
+                <h1>More >></h1>
+            </a>
+        </li>
+    </ul>
+    <hr class="styled-line">
+    <div>
+        <a href="clothes-and-shoes">
+            <button class="buttonsSmall">CLOTHES AND SHOES</button>
+        </a>
+        <a href="electronics">
+            <button class="buttonsSmall">ELECTRONICS</button>
+        </a>
+        <a href="snacks">
+            <button class="buttonsSmall">BEVERAGES AND SNACKS</button>
+        </a>
+        <a href="euroCurency">
+            <button class="buttonsSmall">EURO</button>
+        </a>
+        <a href="originalCurency">
+            <button class="buttonsSmall">ORIGINAL CURRENCY</button>
+        </a>
+    </div>
+    <div class="form-row">
+            </a>
+            <form method="POST">
+                <button th:formaction="@{/above}" class="buttonsSmall2" type="submit">Above</button>
+                <button th:formaction="@{/below}" class="buttonsSmall2">Below</button>
+                <button th:formaction="@{/exactly}" class="buttonsSmall2">Exactly</button>
+            </a>
+            <label class="filterlabel" for="aboveNumberstring">Search for:</label>
+            <input type="text1" id="aboveNumberstring" name="aboveNumberstring" required placeholder="..e.g.:300">
+        </form>
+    </div>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Quantity of stock</th>
+        </tr>
+        <tr th:each="item:${items}">
+            <td th:text="${item.name}">
+            </td>
+            <td th:text="${item.type}">
+            </td>
+            <td th:text="${item.description}">
+            </td>
+            <td th:text="${item.price}">
+            </td>
+            <td th:text="${item.quantityOfStock}">
+            </td>
+        </tr>
+    </table>
+</header>
+</body>
+</html>

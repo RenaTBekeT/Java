@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Signup</title>
+  <link rel='stylesheet' href='styles.css'/>
+</head>
+<body>
+<header class='login-form-header'>
+  <h1>Sign up</h1>
+  <div class = "container">
+  <form id="signup-form" method="POST" action="https://newsletter-ws.herokuapp.com/register">
+    <div class='form-row'>
+      <input type="text" id="name" name="name" required placeholder="Username">
+    </div>
+    <div class='form-row'>
+      <input type="email" id="email" name="email" required placeholder="E-mail">
+    </div>
+    <div class='form-row'>
+      <input id='password' name='password' type='text' placeholder="Password">
+    </div>
+    <div class='form-row'>
+      <input id='passwordagain' name='password2' type='text' placeholder="Retype password">
+    </div>
+  </form>
+  <div>
+    <button class="facebook-button">Facebook</button>
+    <button class="twitter-button">Twitter</button>
+    <button class="google-button">Google</button>
+  </div>
+  </div>
+</header>
+<script>
+</script>
+</body>
+</html>

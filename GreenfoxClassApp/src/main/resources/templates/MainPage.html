@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<header th:text="${count}"></header>
+<a href="/gfa/list">list of all students</a><br>
+<a href="/gfa/checkName">check if student is in database</a>
+<tr th:each="student: ${students}">
+    <td th:text="${student}"></td>
+</tr>
+<form method="POST" th:action="@{/gfa/add}">
+    <div>
+        <label for="add">Add new Student:</label><br>
+        <input type="text" id="add" name="name" required placeholder="...new name">
+        <button class="submitButton" type="submit">add</button><br>
+        <a href="/gfa">Main menu</a>
+    </div>
+</form>
+
+</body>
+</html>

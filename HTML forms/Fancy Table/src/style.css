@@ -1,0 +1,40 @@
+table {
+width: 400px;
+border-spacing: 1px;
+}
+th, tr, table {
+text-align: left;
+border: 1px solid #000;
+border-collapse: collapse;
+}
+.table {
+width: 400px;
+border-spacing: 1px;
+border: 1px solid white;
+}
+th, td {
+padding: 10px;
+border: 1px solid #000;
+border-color: Lightgray;
+}
+tr:nth-child(1) {
+background-color: #000000;
+}
+th {
+color: gray;
+}
+tr {
+color: gray;
+}
+tr:nth-child(even) {
+background-color: #ddd;
+}
+tr:nth-child(3) {
+background-color: #fff;
+}
+tr:nth-child(5) {
+background-color: #fff;
+}
+body {
+  background-color: DeepSkyBlue
+}

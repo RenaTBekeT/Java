@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>index</title>
+  <link rel='stylesheet' href='styles.css'/>
+</head>
+<body>
+<h1>Programmer Fox Club</h1>
+<h2 th:text="'USER ' + ${users.username}"></h2>
+<form name="trick" th:action="@{'/setTricks?name=' + ${name}}" method="post">
+  <label name="trick" for="trick">Tricks</label>
+  <select name="trick" id="trick" th:field="*{tricks}">
+    <option name="trick" th:each="trick : ${tricks}" th:value="${trick}" th:text="${trick}">
+    </option>
+  </select>
+  <input type="submit">
+</form><br>
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+  </tr>
+  <tr><td th:text="${users.id}"></td>
+    <td th:text="${users.username}"></td>
+    <td th:text="${foxes}"></td>
+  </tr>
+</table>
+<img src="greenfox.png" alt="greenFox"><br>
+<a th:href="@{'/nutritionStore?name=' + ${users.getUsername()}}">Nutrition Store</a><br>
+<a th:href="@{'/setTricks?name=' + ${users.getUsername()}}">Set new tricks</a><br>
+<a th:href="@{'/setName?name=' + ${users.getUsername()}}">Set New Name</a>
+<br>
+<br>
+<a href="/foxclub">SIGN OUT</a><br>
+<H1>Known tricks</H1>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Myshop</title>
+    <link rel='stylesheet' href='/styles.css'/>
+</head>
+<body>
+<div th:replace="fragments/web-shop-header"></div>
+<div>
+    <h1 th:text="'Average stock is ' + ${average}"></h1>
+</div>
+
+</body>
+</html>
