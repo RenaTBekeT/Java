@@ -1,0 +1,16 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home Page</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+</head>
+<body>
+<h1>INIZIO TEST</h1>
+<form action="#" th:action="@{/search}" method="post" id="searchForm">
+    <div id="inputFields">
+        <input type="text" placeholder="Search Query" name="searchQuery">
+        <input type="text" placeholder="File Path" name="filePath">
+    </div>
+    <button type="submit">Search</button>
+</form>
+</body>
+</html>
