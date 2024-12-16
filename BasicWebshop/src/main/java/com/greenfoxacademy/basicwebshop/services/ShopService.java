@@ -159,6 +159,7 @@ public class ShopService {
         }
         return belowItems;
     }
+
     public List<ShopItem> exatly(int aboveNumber) {
         List<ShopItem> exatlyItems = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
