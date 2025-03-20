@@ -2,64 +2,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Myshop</title>
-    <link rel='stylesheet' href='/styles.css'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Shop</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #007BFF;
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        .table {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-filter {
+            margin: 5px;
+        }
+        .search-box {
+            max-width: 400px;
+            margin: auto;
+        }
+    </style>
 </head>
 <body>
-<header class='web-shop-header'>
-    <ul>
-        <li style="display:inline-block;">
-            <a class="web-shop-h1" style="text-decoration: none; " href="webshop">
-                <h1>My Shop</h1>
-            </a>
-        </li>
-        <li style="display:inline-block;">
-            <a class="moreLink" style="text-decoration: none; " href="more-filters">
-                <h1>More</h1>
-            </a>
-        </li>
-    </ul>
-        <hr class="styled-line">
-        <div>
 
-            <a href="cheapest-first">
-                <button class="buttonsSmall">CHEAPEST FIRST</button>
-            </a>
-                <a href="contains-nike">
-                    <button class="buttonsSmall">CONTAINS NIKE</button>
-                </a>
-                <a href="average-stock">
-                    <button class="buttonsSmall">AVERAGE STOCK</button>
-                </a>
-                <a href="most-expensive">
-                    <button class="buttonsSmall">MOST EXPENSIVE</button>
-                </a>
+<!-- 🔹 Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="webshop">My Shop</a>
+        <div class="ml-auto">
+            <a class="nav-link" href="more-filters">More</a>
         </div>
-        <form method="POST" th:action="@{/found}">
-            <div class='form-row'>
-                <label class="searchLabel" for="search">Search for:</label><br>
-                <input type="text" id="search" name="search" required placeholder="...something like nike">
-                <button class="submitButton" type="submit">search</button>
-            </div>
+    </div>
+</nav>
+
+<!-- 🔹 Filtry -->
+<div class="container text-center mt-4">
+    <h2>Filter Products</h2>
+    <div class="d-flex flex-wrap justify-content-center">
+        <a href="cheapest-first" class="btn btn-outline-primary btn-filter">Cheapest First</a>
+        <a href="contains-nike" class="btn btn-outline-primary btn-filter">Contains Nike</a>
+        <a href="average-stock" class="btn btn-outline-primary btn-filter">Average Stock</a>
+        <a href="most-expensive" class="btn btn-outline-primary btn-filter">Most Expensive</a>
+    </div>
+</div>
+
+<!-- 🔹 Vyhledávání -->
+<div class="container mt-4">
+    <div class="card p-4 search-box">
+        <form method="POST" th:action="@{/found}" class="text-center">
+            <label for="search" class="form-label">Search for:</label>
+            <input type="text" class="form-control mb-2" id="search" name="search" required placeholder="...something like Nike">
+            <button class="btn btn-primary w-100" type="submit">Search</button>
         </form>
-        <table>
+    </div>
+</div>
+
+<!-- 🔹 Tabulka s produkty -->
+<div class="container mt-5">
+    <h2 class="text-center">Available Products</h2>
+    <div class="table-responsive">
+        <table class="table table-striped text-center">
+            <thead class="table-dark">
             <tr>
                 <th>Name</th>
                 <th>Description</th>
                 <th>Price</th>
-                <th>Quantity of stock</th>
+                <th>Quantity of Stock</th>
             </tr>
+            </thead>
+            <tbody>
             <tr th:each="item:${items}">
-                <td th:text="${item.name}">
-                </td>
-                <td th:text="${item.description}">
-                </td>
-                <td th:text="${item.price}">
-                </td>
-                <td th:text="${item.quantityOfStock}">
-                </td>
+                <td th:text="${item.name}"></td>
+                <td th:text="${item.description}"></td>
+                <td th:text="${item.price}"></td>
+                <td th:text="${item.quantityOfStock}"></td>
             </tr>
+            </tbody>
         </table>
-</header>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

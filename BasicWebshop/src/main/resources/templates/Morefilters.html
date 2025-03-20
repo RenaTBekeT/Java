@@ -2,73 +2,103 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Myshop</title>
-    <link rel='stylesheet' href='/styles.css'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Shop</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #007BFF;
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        .table {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-filter {
+            margin: 5px;
+        }
+        .search-box {
+            max-width: 400px;
+            margin: auto;
+        }
+    </style>
 </head>
 <body>
-<header class='web-shop-header'>
-    <ul>
-        <li style="display:inline-block;">
-            <a class="web-shop-h1" style="text-decoration: none; " href="webshop">
-                <h1>My Shop</h1>
-            </a>
-        </li>
-        <li style="display:inline-block;">
-            <a class="moreLink" style="text-decoration: none; " href="more-filters">
-                <h1>More >></h1>
-            </a>
-        </li>
-    </ul>
-    <hr class="styled-line">
-    <div>
-        <a href="clothes-and-shoes">
-            <button class="buttonsSmall">CLOTHES AND SHOES</button>
-        </a>
-        <a href="electronics">
-            <button class="buttonsSmall">ELECTRONICS</button>
-        </a>
-        <a href="snacks">
-            <button class="buttonsSmall">BEVERAGES AND SNACKS</button>
-        </a>
-        <a href="euroCurency">
-            <button class="buttonsSmall">EURO</button>
-        </a>
-        <a href="originalCurency">
-            <button class="buttonsSmall">ORIGINAL CURRENCY</button>
-        </a>
+
+<!-- 🔹 Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="webshop">My Shop</a>
+        <div class="ml-auto">
+            <a class="nav-link" href="more-filters">More >></a>
+        </div>
     </div>
-    <div class="form-row">
-            </a>
-            <form method="POST">
-                <button th:formaction="@{/above}" class="buttonsSmall2" type="submit">Above</button>
-                <button th:formaction="@{/below}" class="buttonsSmall2">Below</button>
-                <button th:formaction="@{/exactly}" class="buttonsSmall2">Exactly</button>
-            </a>
-            <label class="filterlabel" for="aboveNumberstring">Search for:</label>
-            <input type="text1" id="aboveNumberstring" name="aboveNumberstring" required placeholder="..e.g.:300">
+</nav>
+
+<!-- 🔹 Kategorie produktů -->
+<div class="container text-center mt-4">
+    <h2>Product Categories</h2>
+    <div class="d-flex flex-wrap justify-content-center">
+        <a href="clothes-and-shoes" class="btn btn-outline-primary btn-filter">Clothes & Shoes</a>
+        <a href="electronics" class="btn btn-outline-primary btn-filter">Electronics</a>
+        <a href="snacks" class="btn btn-outline-primary btn-filter">Beverages & Snacks</a>
+        <a href="euroCurency" class="btn btn-outline-primary btn-filter">Euro</a>
+        <a href="originalCurency" class="btn btn-outline-primary btn-filter">Original Currency</a>
+    </div>
+</div>
+
+<!-- 🔹 Filtrování podle ceny -->
+<div class="container mt-4">
+    <div class="card p-4 search-box">
+        <form method="POST" class="text-center">
+            <div class="mb-2">
+                <button th:formaction="@{/above}" class="btn btn-success btn-sm">Above</button>
+                <button th:formaction="@{/below}" class="btn btn-danger btn-sm">Below</button>
+                <button th:formaction="@{/exactly}" class="btn btn-warning btn-sm">Exactly</button>
+            </div>
+            <label for="aboveNumberstring" class="form-label">Search for price:</label>
+            <input type="number" class="form-control mb-2" id="aboveNumberstring" name="aboveNumberstring" required placeholder="E.g.: 300">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
         </form>
     </div>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Quantity of stock</th>
-        </tr>
-        <tr th:each="item:${items}">
-            <td th:text="${item.name}">
-            </td>
-            <td th:text="${item.type}">
-            </td>
-            <td th:text="${item.description}">
-            </td>
-            <td th:text="${item.price}">
-            </td>
-            <td th:text="${item.quantityOfStock}">
-            </td>
-        </tr>
-    </table>
-</header>
+</div>
+
+<!-- 🔹 Tabulka s produkty -->
+<div class="container mt-5">
+    <h2 class="text-center">Available Products</h2>
+    <div class="table-responsive">
+        <table class="table table-striped text-center">
+            <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Quantity of Stock</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item:${items}">
+                <td th:text="${item.name}"></td>
+                <td th:text="${item.type}"></td>
+                <td th:text="${item.description}"></td>
+                <td th:text="${item.price}"></td>
+                <td th:text="${item.quantityOfStock}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -29,7 +29,7 @@ public class RedditController {
     @Autowired
     UsersRepository usersRepository;
 
-    
+
     @GetMapping("/register")
     public String registerPage() {
         return "Register";
