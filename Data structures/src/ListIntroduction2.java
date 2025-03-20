@@ -7,7 +7,7 @@ public class ListIntroduction2 {
     public static void main(String[] args) {
         ArrayList<String> ListA = new ArrayList<String>();
 
-        ListA.add("apple");
+        ListA.add("apples");
         ListA.add("avokado");
         ListA.add("Blueberrys");
         ListA.add("Dorian");
