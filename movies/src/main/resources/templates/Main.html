@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Main Page</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" th:href="@{styles.css}">
+</head>
+
+<body>
+<h1>List of All Movies</h1>
+
+<table class="table bordered table-hover vw-100 vh-100">
+    <tr>
+        <th>Title</th>
+        <th>Genre</th>
+        <th>Year</th>
+        <th>Duration</th>
+        <th>Ranking</th>
+        <th>Link</th>
+    </tr>
+    <tr th:each="movie : ${movies}">
+        <td th:text="${movie.title}">Title</td>
+        <td th:text="${movie.genre}">Genre</td>
+        <td th:text="${movie.year}">Year</td>
+        <td th:text="${movie.duration}">Duration</td>
+        <td th:text="${movie.ranking}">Ranking</td>
+        <td><a th:href="${movie.url}" th:text="${movie.title}">Link to Movie</a></td>
+        <td th:text="${movie.likes}" name="id">Likes</td>
+        <!-- Vote Up -->
+        <!-- Vote Up -->
+        <!-- Vote Up -->
+        <form method="post" th:action="@{'/voteUp?username=' + ${username}}">
+            <input type="hidden" th:value="${movie.id}" name="id"/>
+            <td>
+                <button class="likeButton" type="submit">Like</button>
+            </td>
+        </form>
+
+        <!-- Vote Down -->
+        <form method="post" th:action="@{'/voteDown?username=' + ${username}}">
+            <input type="hidden" th:value="${movie.id}" name="id"/>
+            <td>
+                <button class="dislikeButton" type="submit">Dislike</button>
+            </td>
+        </form>
+    </tr>
+</table>
+
+<hr/>
+
+<h1>Add a New Movie</h1>
+<form method="POST" th:action="@{'/submit'}">
+    <div class='form-row'>
+        <label class="" for="year">Year</label>
+        <select id="year" name="year"></select>
+        <br>
+        <label class="" for="title">Title</label>
+        <input type="text" id="title" name="title">
+        <br>
+        <label class="" for="genre">Genre</label>
+        <select id="genre" name="genre"></select>
+        <br>
+        <label for="duration">Duration (minutes):</label>
+        <select id="duration" name="duration"></select>
+        <br>
+        <label for="ranking">Ranking:</label>
+        <select id="ranking" name="ranking"></select>
+        <br>
+        <label class="" for="url">Url</label>
+        <input type="text" id="url" name="url">
+        <button class="submitButton" type="submit">Submit</button>
+    </div>
+</form>
+<p th:if="${message}" th:text="${message}" class="message"></p>
+<p th:if="${error}" th:text="${error}" class="error"></p>
+<script>
+    var select = document.getElementById("year");
+    var currentYear = new Date().getFullYear();
+
+    for (var i = 0; i < 100; i++) {
+        var option = document.createElement("option");
+        option.text = currentYear - i;
+        option.value = currentYear - i;
+        select.add(option);
+    }
+</script>
+<script>
+    var select = document.getElementById("genre");
+    var genres = ["Action", "Thriller", "Comedy", "Drama", "Horror", "Mysterious", "Biography", "Sports"];
+
+    for (var i = 0; i < genres.length; i++) {
+        var option = document.createElement("option");
+        option.text = genres[i];
+        option.value = genres[i];
+        select.add(option);
+    }
+</script>
+<script>
+    var select = document.getElementById("duration");
+
+    for (var i = 0; i <= 1000; i++) {
+        var option = document.createElement("option");
+        option.text = i;
+        option.value = i;
+        select.add(option);
+    }
+</script>
+<script>
+    var select = document.getElementById("ranking");
+
+    for (var i = 1.0; i <= 9.9; i += 0.1) {
+        var option = document.createElement("option");
+        option.text = i.toFixed(1); // This ensures that we always have one decimal place
+        option.value = i.toFixed(1);
+        select.add(option);
+    }
+</script>
+</body>
+</html>

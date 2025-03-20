@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="cz" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Přihlášení</title>
+    <link rel="stylesheet" href="stylesLogin.css">
+</head>
+<body>
+<div class="login-container">
+    <h1>Login</h1>
+    <form th:action="@{/login}" method="post">
+    <div class="">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+    </div>
+    <div class="">
+        <button type="submit">Login</button>
+    </div>
+    <p th:if="${error}" th:text="${error}"></p>
+</form>
+</div>
+</body>
+</html>
