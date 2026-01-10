@@ -1,11 +1,289 @@
-img {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 5px;
-    width: 150px;
-    margin-top: 14px;
-    margin-bottom: 20px;
+/* =========================
+   Programmer Fox Club — styles.css
+   Clean, readable, consistent.
+   ========================= */
+
+:root{
+  --bg: #0f172a;            /* slate-900 */
+  --panel: #111c33;         /* custom dark */
+  --panel-2: #0b1326;
+  --text: #e5e7eb;          /* gray-200 */
+  --muted: #9ca3af;         /* gray-400 */
+  --line: rgba(255,255,255,.10);
+  --accent: #fb7185;        /* rose-400 */
+  --accent-2: #38bdf8;      /* sky-400 */
+  --ok: #34d399;            /* emerald-400 */
+  --warn: #fbbf24;          /* amber-400 */
+  --danger: #f87171;        /* red-400 */
+
+  --radius: 16px;
+  --radius-sm: 12px;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --shadow-soft: 0 6px 18px rgba(0,0,0,.25);
+  --maxw: 900px;
 }
-.form-row input[type='text'] {
-    border-color: cadetblue;
+
+*{ box-sizing: border-box; }
+
+html, body{ height: 100%; }
+
+body{
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  color: var(--text);
+  background:
+    radial-gradient(1200px 800px at 20% 10%, rgba(56,189,248,.18), transparent 60%),
+    radial-gradient(1000px 700px at 80% 20%, rgba(251,113,133,.18), transparent 55%),
+    radial-gradient(1200px 900px at 50% 100%, rgba(52,211,153,.10), transparent 60%),
+    linear-gradient(180deg, var(--bg), #070b16 85%);
+  line-height: 1.55;
+  padding: 28px 16px 60px;
+}
+
+/* Center everything without needing extra wrapper divs */
+body > *{
+  max-width: var(--maxw);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Headings */
+h1{
+  margin: 0 0 12px;
+  font-size: clamp(28px, 3.2vw, 40px);
+  letter-spacing: .2px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+h1::before{
+  content: "";
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 0 0 6px rgba(255,255,255,.03);
+}
+
+h2{
+  margin: 10px 0 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .14em;
+}
+
+h2[th\\:text] { /* harmless – just to keep it subtle */
+  color: rgba(229,231,235,.92);
+}
+
+/* Paragraphs */
+p{
+  margin: 10px 0;
+  color: rgba(229,231,235,.92);
+}
+
+strong{ color: #fff; }
+
+/* Panels: use table/form default styling as a “panel” feel */
+table, form, .panel{
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Tables */
+table{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  margin: 14px auto 18px;
+}
+
+th, td{
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: middle;
+}
+
+th{
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(229,231,235,.78);
+  background: rgba(0,0,0,.18);
+}
+
+tr:last-child td{ border-bottom: 0; }
+
+tr:hover td{
+  background: rgba(56,189,248,.06);
+}
+
+/* Forms */
+form{
+  padding: 16px;
+  margin: 14px auto 18px;
+}
+
+label{
+  display: block;
+  font-size: 13px;
+  color: rgba(229,231,235,.82);
+  margin: 10px 0 6px;
+}
+
+input[type="text"],
+input[type="password"],
+select{
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.22);
+  color: var(--text);
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease, transform .05s ease;
+}
+
+select{
+  cursor: pointer;
+}
+
+input:focus,
+select:focus{
+  border-color: rgba(56,189,248,.55);
+  box-shadow: 0 0 0 4px rgba(56,189,248,.12);
+}
+
+input:active,
+select:active{
+  transform: translateY(1px);
+}
+
+/* Buttons */
+button,
+input[type="submit"]{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: linear-gradient(135deg, rgba(251,113,133,.85), rgba(56,189,248,.75));
+  color: #0b1020;
+  font-weight: 700;
+  letter-spacing: .02em;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0,0,0,.25);
+  transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+}
+
+button:hover,
+input[type="submit"]:hover{
+  filter: brightness(1.04);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(0,0,0,.30);
+}
+
+button:active,
+input[type="submit"]:active{
+  transform: translateY(0px);
+}
+
+/* Links */
+a{
+  color: rgba(229,231,235,.92);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  margin: 6px 6px 0 0;
+  transition: transform .12s ease, background .12s ease, border-color .12s ease;
+}
+
+a:hover{
+  background: rgba(56,189,248,.08);
+  border-color: rgba(56,189,248,.25);
+  transform: translateY(-1px);
+}
+
+a:active{
+  transform: translateY(0);
+}
+
+/* Make “SIGN OUT” feel more dangerous but still consistent */
+a[href*="foxclub"]{
+  border-color: rgba(248,113,113,.25);
+  background: rgba(248,113,113,.06);
+}
+a[href*="foxclub"]:hover{
+  background: rgba(248,113,113,.10);
+  border-color: rgba(248,113,113,.35);
+}
+
+/* Images */
+img{
+  display: block;
+  max-width: 170px;
+  width: 100%;
+  height: auto;
+  margin: 16px auto 6px;
+  filter: drop-shadow(0 16px 20px rgba(0,0,0,.35));
+  opacity: .95;
+}
+
+/* Lists */
+ul{
+  list-style: none;
+  padding: 0;
+  margin: 12px auto 18px;
+  max-width: var(--maxw);
+}
+
+li{
+  padding: 10px 12px;
+  margin: 8px 0;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+}
+
+/* Small helper for error message line we added in LoginUser.html */
+p[th\\:if][th\\:text]{
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(248,113,113,.22);
+  background: rgba(248,113,113,.08);
+  color: rgba(255,255,255,.95);
+}
+
+/* Better spacing for simple pages (Welcome/Register/Login) */
+body > h1 + h2{
+  margin-top: 0;
+}
+
+/* Responsive tweaks */
+@media (max-width: 520px){
+  body{
+    padding: 18px 12px 44px;
+  }
+  a{
+    width: 100%;
+    justify-content: center;
+  }
+  img{
+    max-width: 150px;
+  }
 }

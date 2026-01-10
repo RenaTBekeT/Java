@@ -6,25 +6,26 @@ import com.example.programmerfoxclubfinal.Reository.TrickRepository;
 import com.example.programmerfoxclubfinal.Reository.UsersRepository;
 import com.example.programmerfoxclubfinal.Tricks;
 import com.example.programmerfoxclubfinal.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Service
 public class FoxService {
-    @Autowired
-    private UsersRepository usersRepository;
-    @Autowired
-    private FoxRepository foxRepository;
-    @Autowired
-    private TrickRepository trickRepository;
 
-    //  private List<Fox> foxes;
-    //   public List<String> currentTricks;
+    private final UsersRepository usersRepository;
+    private final FoxRepository foxRepository;
+    private final TrickRepository trickRepository;
+
+    public FoxService(UsersRepository usersRepository,
+                      FoxRepository foxRepository,
+                      TrickRepository trickRepository) {
+        this.usersRepository = usersRepository;
+        this.foxRepository = foxRepository;
+        this.trickRepository = trickRepository;
+    }
+
     public User createUser(User user) {
         return usersRepository.save(user);
     }
@@ -32,72 +33,124 @@ public class FoxService {
     public Fox createFox(Fox fox) {
         return foxRepository.save(fox);
     }
-//    public boolean isNameExists(String name) {
-//        return usersRepository.existsByName(name);
-//    }
 
     public User register(String name, String password) {
-        // if (!isNameExists(name)) {
         User user = new User(name, password);
-        Fox newfox = new Fox();
         usersRepository.save(user);
-        newfox.setUser(user);
-        foxRepository.save(newfox);
-        return user;
-        //} else return null;
-    }
 
-
-    public Boolean isUser(String name, String password) {
-        User user = usersRepository.findByName(name);
-        if (user == null) {
-            return false;
-        }
-        if (!user.getPassword().equals(password)) {
-            return false;
-        }
-        return true;
-    }
-
-    public void add(String name) {
-        Fox newFox = new Fox(name);
+        // vytvoříme default lišku, aby appka hned fungovala
+        Fox newFox = new Fox();
+        newFox.setUser(user);
         foxRepository.save(newFox);
+
+        // pokud má User kolekci foxů a mapping je bidirectional,
+        // je dobré ji udržovat i na této straně (neškodí to)
+        try {
+            if (user.getFox() != null) {
+                user.getFox().add(newFox);
+                usersRepository.save(user);
+            }
+        } catch (Exception ignored) {
+            // když mapping/collection není takto nastavená, nebudeme to tady lámat
+        }
+
+        return user;
     }
 
-    public void updateFoxName(String setName, String name) {
-        User user = usersRepository.findByName(name);
-        Fox fox = (Fox) user.getFox().toArray()[0];
-        //  Fox fox = foxRepository.findFirstByUser(user);
+    public boolean isUser(String name, String password) {
+        User user = usersRepository.findByUsername(name);
+        if (user == null) return false;
+        return user.getPassword() != null && user.getPassword().equals(password);
+    }
+
+    public void updateFoxName(String setName, String username) {
+        User user = usersRepository.findByUsername(username);
+        if (user == null) return;
+
+        Fox fox = getOrCreatePrimaryFox(user);
         fox.setName(setName);
         foxRepository.save(fox);
-        // foxRepository.setName(setName, user.getId().longValue());
     }
 
-    public void updateFoxFoodAndDrink(String food, String drink, String name) {
-        User user = usersRepository.findByName(name);
-        Fox fox = (Fox) user.getFox().toArray()[0];
-        //  Fox fox = foxRepository.findFirstByUser(user);
+    public void updateFoxFoodAndDrink(String food, String drink, String username) {
+        User user = usersRepository.findByUsername(username);
+        if (user == null) return;
+
+        Fox fox = getOrCreatePrimaryFox(user);
         fox.setFood(food);
         fox.setDrink(drink);
         foxRepository.save(fox);
-        // foxRepository.setName(setName, user.getId().longValue());
     }
 
-    public void updateTricks(String trickName, String name) {
-        User user = usersRepository.findByName(name);
-        Fox fox = (Fox) user.getFox().toArray()[0];
+    public void updateTricks(String trickName, String username) {
+        User user = usersRepository.findByUsername(username);
+        if (user == null) return;
+
+        Fox fox = getOrCreatePrimaryFox(user);
+
         Tricks trick = trickRepository.findByNameOfTrick(trickName);
+        if (trick == null) return;
+
+        // zabráníme duplicitám a zbytečným save
+        if (fox.getTricks() != null && fox.getTricks().contains(trick)) {
+            return;
+        }
+
         fox.getTricks().add(trick);
-        trick.getFox().add(fox);
+
+        // obousměrný vztah jen pokud existuje kolekce i na tricku
+        try {
+            if (trick.getFox() != null && !trick.getFox().contains(fox)) {
+                trick.getFox().add(fox);
+            }
+        } catch (Exception ignored) {
+        }
+
         foxRepository.save(fox);
         trickRepository.save(trick);
     }
 
-    public void addAnotherFox(String name) {
-        User user = usersRepository.findByName(name);
-        Fox newfox = new Fox();
-        newfox.setUser(user);
-        foxRepository.save(newfox);
-        //} else return null;
+    public void addAnotherFox(String username) {
+        User user = usersRepository.findByUsername(username);
+        if (user == null) return;
+
+        Fox newFox = new Fox();
+        newFox.setUser(user);
+        foxRepository.save(newFox);
+
+        // udržet kolekci na userovi (pokud existuje a je mutable)
+        try {
+            if (user.getFox() != null) {
+                user.getFox().add(newFox);
+                usersRepository.save(user);
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    /**
+     * Vezme “primární” lišku uživatele (první z kolekce).
+     * Když žádná není, vytvoří ji, uloží a vrátí.
+     */
+    private Fox getOrCreatePrimaryFox(User user) {
+        Collection<Fox> foxes = user.getFox();
+        if (foxes != null && !foxes.isEmpty()) {
+            // bezpečný převod (bez toArray()[0] bordelu)
+            return new ArrayList<>(foxes).get(0);
+        }
+
+        Fox fox = new Fox();
+        fox.setUser(user);
+        foxRepository.save(fox);
+
+        try {
+            if (user.getFox() != null) {
+                user.getFox().add(fox);
+                usersRepository.save(user);
+            }
+        } catch (Exception ignored) {
+        }
+
+        return fox;
     }
 }

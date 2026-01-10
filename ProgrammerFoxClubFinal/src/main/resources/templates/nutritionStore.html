@@ -1,46 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>index</title>
-    <link rel='stylesheet' href='styles.css'/>
+    <title>Nutrition Store</title>
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
 </head>
 <body>
+
 <h1>Programmer Fox Club</h1>
 <h2 th:text="'USER ' + ${users.username}"></h2>
-<form th:action="@{'/nutritionStore?name=' + ${name}}" method="post">
-    <label for="food">Food </label>
+
+<!-- Aktuální liška (pokud existuje) -->
+<div th:if="${fox != null}">
+    <p>
+        Current fox:
+        <strong th:text="${fox.name}">Fox</strong>
+    </p>
+    <p>
+        Food: <span th:text="${fox.food}">-</span><br>
+        Drink: <span th:text="${fox.drink}">-</span>
+    </p>
+</div>
+
+<p th:if="${fox == null}">
+    You don’t have a fox yet. Add one first.
+</p>
+
+<form th:action="@{/nutritionStore}" method="post">
+    <!-- name posíláme vždycky -->
+    <input type="hidden" name="name" th:value="${users.username}"/>
+
+    <label for="food">Food</label>
     <select id="food" name="food">
         <option value="pizza">Pizza</option>
         <option value="McDonald's">McDonald's</option>
-        <option value="Nachos">Nachos</option>
+        <option value="nachos">Nachos</option>
     </select>
-    <label for="drink">Drink </label>
+
+    <label for="drink">Drink</label>
     <select id="drink" name="drink">
         <option value="lemonade">Lemonade</option>
-        <option value="Coca-cola">Coca-cola</option>
-        <option value="Monster Energy">Monster Energy</option>
-        <option value="Monster Energy">Orange Juice</option>
+        <option value="coca-cola">Coca-cola</option>
+        <option value="monster-energy">Monster Energy</option>
+        <option value="orange-juice">Orange Juice</option>
     </select>
-    <input type="submit">
-</form><br>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-    </tr>
-    <tr><td th:text="${users.id}"></td>
-        <td th:text="${users.username}"></td>
-        <td th:text="${foxes}"></td>
-    </tr>
-</table>
-<img src="greenfox.png" alt="greenFox"><br>
-<a th:href="@{'/nutritionStore?name=' + ${users.getUsername()}}">Nutrition Store</a><br>
-<a th:href="@{'/setTricks?name=' + ${users.getUsername()}}">Set new tricks</a><br>
-<a th:href="@{'/setName?name=' + ${users.getUsername()}}">Set New Name</a>
+
+    <button type="submit">Save</button>
+</form>
+
 <br>
-<br>
-<a href="/foxclub">SIGN OUT</a><br>
-<H1>Known tricks</H1>
+
+<img th:src="@{/greenfox.png}" alt="greenFox"><br><br>
+
+<a th:href="@{'/index?name=' + ${users.username}}">Back to dashboard</a><br>
+<a th:href="@{'/setTricks?name=' + ${users.username}}">Set new tricks</a><br>
+<a th:href="@{'/setName?name=' + ${users.username}}">Set New Name</a><br>
+<a th:href="@{'/addAnotherFox?name=' + ${users.username}}">Add Another Fox</a><br>
+
+<br><br>
+
+<a th:href="@{/foxclub}">SIGN OUT</a><br>
+
 </body>
 </html>

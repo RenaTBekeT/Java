@@ -1,14 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Welcomepage</title>
-    <link rel='stylesheet' href='styles.css'/>
+    <title>Welcome</title>
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
 </head>
 <body>
-<h1>Welcome to Progammer Fox APP</h1>
-<a href="/loginUser" th:action="@{/loginUser}">LOGIN</a><br>
-<a href="/register" th:action="@{/register}">REGISTER</a><br>
-<img src="greenfox.png" alt="greenFox">
+
+<h1>Welcome to Programmer Fox Club</h1>
+
+<a th:href="@{/loginUser}">LOGIN</a><br>
+<a th:href="@{/register}">REGISTER</a><br><br>
+
+<img th:src="@{/greenfox.png}" alt="greenFox">
+
 </body>
 </html>

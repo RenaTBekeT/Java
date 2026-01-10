@@ -1,38 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>index</title>
-  <link rel='stylesheet' href='styles.css'/>
+  <title>Trick Center</title>
+  <link rel="stylesheet" th:href="@{/styles.css}"/>
 </head>
 <body>
+
 <h1>Programmer Fox Club</h1>
 <h2 th:text="'USER ' + ${users.username}"></h2>
-<form name="trick" th:action="@{'/setTricks?name=' + ${name}}" method="post">
-  <label name="trick" for="trick">Tricks</label>
-  <select name="trick" id="trick" th:field="*{tricks}">
-    <option name="trick" th:each="trick : ${tricks}" th:value="${trick}" th:text="${trick}">
+
+<form th:action="@{/setTricks}" method="post">
+  <!-- controller chce @RequestParam String name -->
+  <input type="hidden" name="name" th:value="${users.username}"/>
+
+  <label for="trick">Tricks</label>
+  <select name="trick" id="trick" required>
+    <option value="" disabled selected>Select a trick</option>
+    <option th:each="t : ${tricks}"
+            th:value="${t.nameOfTrick}"
+            th:text="${t.nameOfTrick}">
     </option>
   </select>
-  <input type="submit">
-</form><br>
-<table>
-  <tr>
-    <th>ID</th>
-    <th>Name</th>
-  </tr>
-  <tr><td th:text="${users.id}"></td>
-    <td th:text="${users.username}"></td>
-    <td th:text="${foxes}"></td>
-  </tr>
-</table>
-<img src="greenfox.png" alt="greenFox"><br>
-<a th:href="@{'/nutritionStore?name=' + ${users.getUsername()}}">Nutrition Store</a><br>
-<a th:href="@{'/setTricks?name=' + ${users.getUsername()}}">Set new tricks</a><br>
-<a th:href="@{'/setName?name=' + ${users.getUsername()}}">Set New Name</a>
+
+  <button type="submit">Save</button>
+</form>
+
 <br>
-<br>
-<a href="/foxclub">SIGN OUT</a><br>
-<H1>Known tricks</H1>
+
+<img th:src="@{/greenfox.png}" alt="greenFox"><br>
+
+<a th:href="@{'/index?name=' + ${users.username}}">Back to dashboard</a><br>
+<a th:href="@{'/nutritionStore?name=' + ${users.username}}">Nutrition Store</a><br>
+<a th:href="@{'/setName?name=' + ${users.username}}">Set New Name</a><br>
+
+<br><br>
+
+<a th:href="@{/foxclub}">SIGN OUT</a><br>
+
 </body>
 </html>

@@ -1,37 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>index</title>
-    <link rel='stylesheet' href='styles.css'/>
+    <title>Set Fox Name</title>
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
 </head>
 <body>
+
 <h1>Programmer Fox Club</h1>
 <h2 th:text="'USER ' + ${users.username}"></h2>
-<form method="POST" th:action="@{'/setName?name=' + ${name}}">
+
+<form method="POST" th:action="@{/setName}">
+    <!-- controller chce @RequestParam String name -->
+    <input type="hidden" name="name" th:value="${users.username}"/>
+
     <div>
-        <label class="" for="setName">New name</label>
-        <input type="text" id="setName" name="setName">
-        <button class="submitButton" type="submit" >GO</button>
+        <label for="setName">New name</label>
+        <input type="text" id="setName" name="setName" required>
+        <button class="submitButton" type="submit">GO</button>
     </div>
-</form><br>
+</form>
+
+<br>
+
 <table>
     <tr>
         <th>ID</th>
-        <th>Name</th>
+        <th>Username</th>
     </tr>
-    <tr><td th:text="${users.id}"></td>
+    <tr>
+        <td th:text="${users.id}"></td>
         <td th:text="${users.username}"></td>
-        <td th:text="${foxes}"></td>
     </tr>
 </table>
-<img src="greenfox.png" alt="greenFox"><br>
-<a th:href="@{'/nutritionStore?name=' + ${users.getUsername()}}">Nutrition Store</a><br>
-<a th:href="@{'/setTricks?name=' + ${users.getUsername()}}">Set new tricks</a><br>
-<a th:href="@{'/setName?name=' + ${users.getUsername()}}">Set New Name</a>
+
 <br>
-<br>
-<a href="/foxclub">SIGN OUT</a><br>
-<H1>Known tricks</H1>
+
+<img th:src="@{/greenfox.png}" alt="greenFox"><br>
+
+<a th:href="@{'/index?name=' + ${users.username}}">Back to dashboard</a><br>
+<a th:href="@{'/nutritionStore?name=' + ${users.username}}">Nutrition Store</a><br>
+<a th:href="@{'/setTricks?name=' + ${users.username}}">Set new tricks</a><br>
+
+<br><br>
+
+<a th:href="@{/foxclub}">SIGN OUT</a><br>
+
 </body>
 </html>

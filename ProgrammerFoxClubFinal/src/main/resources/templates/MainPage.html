@@ -1,27 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
-    <title>MainPage</title>
+    <title>Programmer Fox Club</title>
 </head>
-<body>
-<h1>GFA Fox Sactuary</h1>
-<table class="table bordered table-hover vw-100 vh-100">
+<body class="p-3">
+
+<h1>Programmer Fox Club</h1>
+<h2>Fox list</h2>
+
+<table class="table table-bordered table-hover w-100">
+    <thead>
     <tr>
         <th>Age</th>
         <th>Name</th>
         <th>Species</th>
         <th>TakeCarer</th>
     </tr>
-    <tr th:each="fox: ${foxes}">
-        <td th:text="${fox.name}">Date</td>
-        <td th:text="${fox.age}">Date</td>
-        <td th:text="${fox.species}">Likes</td>
-        <td th:text="${fox.takeCarer}">Likes</td>
+    </thead>
+
+    <tbody>
+    <tr th:if="${foxes == null or #lists.isEmpty(foxes)}">
+        <td colspan="4">No foxes found.</td>
     </tr>
+
+    <tr th:each="fox : ${foxes}">
+        <td th:text="${fox.age}">0</td>
+        <td th:text="${fox.name}">Fox</td>
+        <td th:text="${fox.species}">Unknown</td>
+        <td th:text="${fox.takeCarer}">None</td>
+    </tr>
+    </tbody>
 </table>
+
 </body>
 </html>
