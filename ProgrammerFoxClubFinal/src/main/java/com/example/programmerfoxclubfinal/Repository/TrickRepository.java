@@ -1,4 +1,4 @@
-package com.example.programmerfoxclubfinal.Reository;
+package com.example.programmerfoxclubfinal.Repository;
 
 import com.example.programmerfoxclubfinal.Tricks;
 import com.example.programmerfoxclubfinal.User;
@@ -11,5 +11,5 @@ public interface TrickRepository extends CrudRepository<Tricks, Long> {
     @Query("SELECT u FROM User u where u.username = ?1 ")
     User setName(String name);
 
-     Tricks findByNameOfTrick(String trickname);
+    Tricks findByNameOfTrick(String trickname);
 }

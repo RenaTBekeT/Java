@@ -1,10 +1,10 @@
 package com.example.programmerfoxclubfinal.Controllers;
 
-import com.example.programmerfoxclubfinal.Fox;
-import com.example.programmerfoxclubfinal.Reository.FoxRepository;
-import com.example.programmerfoxclubfinal.Reository.TrickRepository;
-import com.example.programmerfoxclubfinal.Reository.UsersRepository;
-import com.example.programmerfoxclubfinal.Services.FoxService;
+import com.example.programmerfoxclubfinal.Pokemon;
+import com.example.programmerfoxclubfinal.Repository.PokemonRepository;
+import com.example.programmerfoxclubfinal.Repository.TrickRepository;
+import com.example.programmerfoxclubfinal.Repository.UsersRepository;
+import com.example.programmerfoxclubfinal.Services.PokemonService;
 import com.example.programmerfoxclubfinal.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,25 +14,26 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Controller
-public class FoxController {
-    private final FoxService foxService;
-    private final FoxRepository foxRepository;      // nechávám, i když teď není použité
+public class PokemonController {
+
+    private final PokemonService pokemonService;
+    private final PokemonRepository pokemonRepository;
     private final UsersRepository usersRepository;
     private final TrickRepository trickRepository;
 
-    public FoxController(FoxService foxService,
-                         FoxRepository foxRepository,
-                         UsersRepository usersRepository,
-                         TrickRepository trickRepository) {
-        this.foxService = foxService;
-        this.foxRepository = foxRepository;
+    public PokemonController(PokemonService pokemonService,
+                             PokemonRepository pokemonRepository,
+                             UsersRepository usersRepository,
+                             TrickRepository trickRepository) {
+        this.pokemonService = pokemonService;
+        this.pokemonRepository = pokemonRepository;
         this.usersRepository = usersRepository;
         this.trickRepository = trickRepository;
     }
 
     // -------------------- WELCOME --------------------
 
-    @GetMapping("/foxclub")
+    @GetMapping("/pokemonclub")
     public String welcomePage() {
         return "WelcomePage";
     }
@@ -45,10 +46,20 @@ public class FoxController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String name, @RequestParam String password) {
-        foxService.register(name, password);
-        return "redirect:/loginUser";
+    public String register(@RequestParam String name,
+                           @RequestParam String password,
+                           Model model) {
+
+        User created = pokemonService.register(name, password);
+
+        if (created == null) {
+            model.addAttribute("error", "Name already exist");
+            return "register";
+        }
+
+        return "redirect:/chooseProfilePicture?name=" + name;
     }
+
 
     // -------------------- LOGIN --------------------
 
@@ -61,7 +72,7 @@ public class FoxController {
     public String loginUser(@RequestParam String name,
                             @RequestParam String password,
                             Model model) {
-        if (foxService.isUser(name, password)) {
+        if (pokemonService.isUser(name, password)) {
             return "redirect:/index?name=" + name;
         }
         model.addAttribute("error", "Invalid username or password");
@@ -77,13 +88,16 @@ public class FoxController {
             return "redirect:/loginUser";
         }
 
+        var pokemons = pokemonRepository.findAllByUser(users);
+
         model.addAttribute("name", name);
         model.addAttribute("users", users);
-        model.addAttribute("foxes", users.getFox());
-        model.addAttribute("fox", firstFoxOrNull(users.getFox()));
+        model.addAttribute("pokemons", pokemons);
+        model.addAttribute("pokemon", firstPokemonOrNull(pokemons));
 
         return "index";
     }
+
 
     // -------------------- NUTRITION --------------------
 
@@ -96,26 +110,25 @@ public class FoxController {
 
         model.addAttribute("name", name);
         model.addAttribute("users", users);
-        model.addAttribute("foxes", users.getFox());
-        model.addAttribute("fox", firstFoxOrNull(users.getFox()));
+        model.addAttribute("pokemons", users.getPokemons());
+        model.addAttribute("pokemon", firstPokemonOrNull(users.getPokemons()));
 
         return "nutritionStore";
     }
 
     @PostMapping("/nutritionStore")
-    public String setFoxDrinkAndFood(@RequestParam String name,
-                                     @RequestParam String food,
-                                     @RequestParam String drink) {
-        // když user neexistuje, radši zpět na login
+    public String setPokemonDrinkAndFood(@RequestParam String name,
+                                         @RequestParam String food,
+                                         @RequestParam String drink) {
         if (usersRepository.findByUsername(name) == null) {
             return "redirect:/loginUser";
         }
 
-        foxService.updateFoxFoodAndDrink(food, drink, name);
+        pokemonService.updatePokemonFoodAndDrink(food, drink, name);
         return "redirect:/index?name=" + name;
     }
 
-    // -------------------- SET FOX NAME --------------------
+    // -------------------- SET POKEMON NAME --------------------
 
     @GetMapping("/setName")
     public String setNamePage(@RequestParam String name, Model model) {
@@ -126,19 +139,19 @@ public class FoxController {
 
         model.addAttribute("name", name);
         model.addAttribute("users", users);
-        model.addAttribute("foxes", users.getFox());
-        model.addAttribute("fox", firstFoxOrNull(users.getFox()));
+        model.addAttribute("pokemons", users.getPokemons());
+        model.addAttribute("pokemon", firstPokemonOrNull(users.getPokemons()));
 
         return "SetNamePage";
     }
 
     @PostMapping("/setName")
-    public String setFoxName(@RequestParam String name, @RequestParam String setName) {
+    public String setPokemonName(@RequestParam String name, @RequestParam String setName) {
         if (usersRepository.findByUsername(name) == null) {
             return "redirect:/loginUser";
         }
 
-        foxService.updateFoxName(setName, name);
+        pokemonService.updatePokemonName(setName, name);
         return "redirect:/index?name=" + name;
     }
 
@@ -153,8 +166,8 @@ public class FoxController {
 
         model.addAttribute("name", name);
         model.addAttribute("users", users);
-        model.addAttribute("foxes", users.getFox());
-        model.addAttribute("fox", firstFoxOrNull(users.getFox()));
+        model.addAttribute("pokemons", users.getPokemons());
+        model.addAttribute("pokemon", firstPokemonOrNull(users.getPokemons()));
         model.addAttribute("tricks", trickRepository.findAll());
 
         return "TrickCenter";
@@ -166,31 +179,49 @@ public class FoxController {
             return "redirect:/loginUser";
         }
 
-        foxService.updateTricks(trick, name);
+        pokemonService.updateTricks(trick, name);
         return "redirect:/index?name=" + name;
     }
 
-    // -------------------- FOX MANAGEMENT --------------------
+    // -------------------- POKEMON MANAGEMENT --------------------
+    // NEW: POST add from select (instead of GET random/empty)
 
-    @GetMapping("/addAnotherFox")
-    public String addAnotherFox(@RequestParam String name) {
+    @PostMapping("/addAnotherPokemon")
+    public String addAnotherPokemon(@RequestParam String name,
+                                    @RequestParam String pokemonName) {
         if (usersRepository.findByUsername(name) == null) {
             return "redirect:/loginUser";
         }
 
-        foxService.addAnotherFox(name);
+        pokemonService.addAnotherPokemon(name, pokemonName);
         return "redirect:/index?name=" + name;
     }
 
     // -------------------- HELPERS --------------------
 
-    private Fox firstFoxOrNull(Collection<Fox> foxes) {
-        if (foxes == null || foxes.isEmpty()) {
+    private Pokemon firstPokemonOrNull(Collection<Pokemon> pokemons) {
+        if (pokemons == null || pokemons.isEmpty()) {
             return null;
         }
-        return new ArrayList<>(foxes).get(0);
+        return new ArrayList<>(pokemons).get(0);
     }
+
+    @GetMapping("/chooseProfilePicture")
+    public String chooseProfilePicture(@RequestParam String name, Model model) {
+        if (usersRepository.findByUsername(name) == null) return "redirect:/loginUser";
+        model.addAttribute("name", name);
+        return "ChooseProfilePicture";
+    }
+
+    @GetMapping("/setProfilePicture")
+    public String setProfilePicture(@RequestParam String name, @RequestParam String avatar) {
+        User user = usersRepository.findByUsername(name);
+        if (user == null) return "redirect:/loginUser";
+
+        user.setProfileImagePath("/" + avatar); // uložíš cestu pro <img src="...">
+        usersRepository.save(user);
+
+        return "redirect:/index?name=" + name;
+    }
+
 }
-
-
-

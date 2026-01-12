@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose Profile Picture</title>
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        .avatarGrid{
+          display:grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap:16px;
+          margin-top: 14px;
+        }
+        @media (max-width: 520px){
+          .avatarGrid{ grid-template-columns: 1fr; }
+        }
+
+        .avatarPick{
+          display:block;
+          border-radius: 18px;
+          border: 1px solid rgba(11,18,32,.12);
+          background: rgba(255,255,255,.92);
+          box-shadow: 0 10px 24px rgba(0,0,0,.12);
+          padding: 14px;
+          transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+          text-decoration: none;
+        }
+        .avatarPick:hover{
+          transform: translateY(-3px);
+          box-shadow: 0 16px 36px rgba(0,0,0,.22);
+          filter: brightness(1.02);
+        }
+        .avatarPick img{
+          width:100%;
+          height:160px;
+          object-fit: contain;
+          display:block;
+        }
+        .avatarLabel{
+          margin-top:10px;
+          text-align:center;
+          font-weight:900;
+          font-size:13px;
+          letter-spacing:.14em;
+          text-transform:uppercase;
+          color: rgba(11,18,32,.78);
+        }
+        .chooseTitle{
+          margin:0 0 6px;
+          font-size: 13px;
+          letter-spacing: .22em;
+          text-transform: uppercase;
+          color: rgba(37,99,235,.95);
+          font-weight: 1000;
+          text-align:center;
+        }
+        .chooseSub{
+          margin:0 0 16px;
+          text-align:center;
+          color: rgba(11,18,32,.62);
+          font-weight: 800;
+          font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+<main class="authWrap">
+
+    <div class="authContainer">
+
+        <div class="authCard">
+            <div class="chooseTitle">Choose your profile picture</div>
+            <div class="chooseSub">Click one image to continue</div>
+
+            <div class="avatarGrid">
+
+                <a class="avatarPick avatarLink"
+                   href="#"
+                   th:attr="data-target=@{'/setProfilePicture?name=' + ${name} + '&avatar=AvatarAsh.png'}">
+                    <img th:src="@{/AvatarAsh.png}" alt="Ash">
+                    <div class="avatarLabel">Ash</div>
+                </a>
+
+                <a class="avatarPick avatarLink"
+                   href="#"
+                   th:attr="data-target=@{'/setProfilePicture?name=' + ${name} + '&avatar=AvatarMisty.png'}">
+                    <img th:src="@{/AvatarMisty.png}" alt="Misty">
+                    <div class="avatarLabel">Misty</div>
+                </a>
+
+                <a class="avatarPick avatarLink"
+                   href="#"
+                   th:attr="data-target=@{'/setProfilePicture?name=' + ${name} + '&avatar=AvatarBrock.png'}">
+                    <img th:src="@{/AvatarBrock.png}" alt="Brock">
+                    <div class="avatarLabel">Brock</div>
+                </a>
+            </div>
+
+            <div class="authLinks" style="margin-top:18px;">
+                <a class="btn btn-soft" th:href="@{/pokemonclub}">Back</a>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+<audio id="avatarPickSound" preload="auto">
+    <source src="/theme.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    (() => {
+      const audio = document.getElementById('avatarPickSound');
+      if (!audio) return;
+
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('.avatarLink');
+        if (!link) return;
+
+        // ZABRÁNÍ navigaci na 100 %
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+
+        const target = link.getAttribute('data-target');
+        if (!target) return;
+
+        audio.pause();
+        audio.currentTime = 0;
+        audio.volume = 0.9;
+
+        audio.play().catch(() => {}).finally(() => {
+          setTimeout(() => { window.location.href = target; }, 5000);
+        });
+      }, true); // <-- CAPTURE (důležité)
+    })();
+</script>
+</body>
+</html>

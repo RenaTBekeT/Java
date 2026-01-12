@@ -2,77 +2,172 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Programmer Fox Club</title>
-    <link rel="stylesheet" th:href="@{/styles.css}"/>
+    <title>Programmer Pokémon Club</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-<h1>Programmer Fox Club</h1>
-
-<!-- když users není v modelu, neshodí to stránku -->
-<div th:if="${users == null}">
-    <h2>User not loaded</h2>
-    <p>Missing model attribute <strong>users</strong> (or user not found).</p>
-    <a th:href="@{/loginUser}">Go to login</a>
+<!-- DEKORACE – MEWTWO (NIC NEPOSOUVÁ) -->
+<div class="bgPokemon bgLeft">
+    <img th:src="@{/Mewto.png}" alt="Mewtwo">
 </div>
+<div class="bgPokemon1 bgRight">
+    <img th:src="@{/Mew.png}" alt="Mew">
+</div>
+<main>
 
-<div th:if="${users != null}">
-    <h2 th:text="'USER ' + ${users.username}"></h2>
+    <!-- NAVBAR -->
+    <nav class="navbar" th:if="${users != null}">
+        <div class="nav-left">
+            <span class="nav-badge">
+                <span class="nav-dot"></span>
+                <span class="nav-user" th:text="${users.username}"></span>
+            </span>
+        </div>
 
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Username</th>
-        </tr>
-        <tr>
-            <td th:text="${users.id}"></td>
-            <td th:text="${users.username}"></td>
-        </tr>
-    </table>
+        <div class="nav-right">
+            <a class="btn btn-ghost btn-danger" th:href="@{/pokemonclub}">Sign out</a>
+        </div>
+    </nav>
 
-    <h2>Foxes</h2>
-    <table>
-        <tr>
-            <th>Fox ID</th>
-            <th>Fox Name</th>
-        </tr>
+    <!-- LOGO -->
+    <img class="logo" th:src="@{/logo.svg.png}" alt="Logo">
 
-        <tr th:if="${foxes == null or #lists.isEmpty(foxes)}">
-            <td colspan="2">No fox yet. Add one.</td>
-        </tr>
-
-        <tr th:each="fox : ${foxes}">
-            <td th:text="${fox.id}"></td>
-            <td th:text="${fox.name}"></td>
-        </tr>
-    </table>
-
-    <br>
-
-    <img th:src="@{/greenfox.png}" alt="greenFox"><br>
-
-    <a th:href="@{'/nutritionStore?name=' + ${users.username}}">Nutrition Store</a><br>
-    <a th:href="@{'/setTricks?name=' + ${users.username}}">Set new tricks</a><br>
-    <a th:href="@{'/setName?name=' + ${users.username}}">Set New Name</a><br>
-    <a th:href="@{'/addAnotherFox?name=' + ${users.username}}">Add Another Fox</a><br>
-
-    <br><br>
-
-    <a th:href="@{/foxclub}">SIGN OUT</a><br>
-
-    <h1>Known tricks</h1>
-
-    <div th:if="${not #lists.isEmpty(foxes)}">
-        <ul th:if="${not #lists.isEmpty(foxes[0].tricks)}">
-            <li th:each="trick : ${foxes[0].tricks}"
-                th:text="${trick.nameOfTrick}">
-            </li>
-        </ul>
-        <p th:if="${#lists.isEmpty(foxes[0].tricks)}">No tricks yet.</p>
+    <!-- ERROR -->
+    <div class="notice" th:if="${users == null}">
+        <h2>User not loaded</h2>
+        <p class="muted">Session expired or user not found.</p>
+        <a class="btn btn-primary" th:href="@{/loginUser}">Go to login</a>
     </div>
 
-    <p th:if="${foxes == null or #lists.isEmpty(foxes)}">Create a fox to start learning tricks.</p>
-</div>
+    <!-- USER INFO -->
+    <section class="card dashboard" th:if="${users != null}">
+        <header class="cardHead userHeader">
+            <div class="userInfo">
+                <div class="kicker">USER</div>
+                <h1 class="title" th:text="${users.username}"></h1>
+            </div>
 
+            <div class="userAvatar">
+                <img th:src="${users.profileImagePath}" alt="Avatar">
+            </div>
+        </header>
+
+        <div class="divider"></div>
+
+        <div class="dashboardGrid">
+
+            <!-- POKEMONS LIST -->
+            <section class="cardInner">
+                <div class="sectionHead">
+                    <h2>Your Pokémons</h2>
+                    <span class="pill" th:text="${pokemons != null} ? ${#lists.size(pokemons)} : 0"></span>
+                </div>
+
+                <div class="tableWrap">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Pokémon name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${pokemons == null or pokemons.size() == 0}">
+                            <td class="muted">No Pokémon yet</td>
+                        </tr>
+
+                        <tr th:each="p : ${pokemons}">
+                            <td>
+                                <span class="pokeHover">
+                                    <span class="pokeName" th:text="${p.name}"></span>
+
+                                    <span class="pokeCard">
+                                        <img th:src="${p.imagePath}" th:alt="${p.name}">
+                                        <span class="pokeCardTitle" th:text="${p.name}"></span>
+                                    </span>
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- CATCH NEW POKEMON -->
+            <section class="cardInner">
+                <div class="sectionHead">
+                    <h2>Catch new Pokémon</h2>
+                </div>
+                <form method="POST"
+                      th:action="@{/addAnotherPokemon}"
+                      class="authForm"
+                      id="catchPokemonForm">
+
+                    <input type="hidden" name="name" th:value="${users.username}"/>
+
+                    <div class="field">
+                        <label for="pokemonName">Choose Pokémon</label>
+                        <select id="pokemonName" name="pokemonName" class="input" required>
+                            <option value="" disabled selected>— choose —</option>
+                            <option value="Pikachu">Pikachu</option>
+                            <option value="Bulbasaur">Bulbasaur</option>
+                            <option value="Charmander">Charmander</option>
+                            <option value="Squirtle">Squirtle</option>
+                            <option value="Eevee">Eevee</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary btn-block" type="submit">
+                        Catch Pokémon
+                    </button>
+                </form>
+
+            </section>
+
+        </div>
+    </section>
+
+</main>
+<!-- 🔊 Pokémon sounds -->
+<audio id="pikachuSound" src="/pikachuSound.mp3" preload="auto"></audio>
+<audio id="bulbasaurSound" src="/bulbasaurSound.mp3" preload="auto"></audio>
+<audio id="charmanderSound" src="/charmanderSound.mp3" preload="auto"></audio>
+<audio id="squirtleSound" src="/squirtleSound.mp3" preload="auto"></audio>
+<audio id="eeveeSound" src="/eeveeSound.mp3" preload="auto"></audio>
+
+<script>
+    (() => {
+      const form = document.getElementById('catchPokemonForm');
+      const select = document.getElementById('pokemonName');
+      if (!form || !select) return;
+
+      form.addEventListener('submit', (e) => {
+        const pokemon = select.value;
+        if (!pokemon) return;
+
+        const audioId = pokemon.toLowerCase() + 'Sound';
+        const audio = document.getElementById(audioId);
+        if (!audio) return;
+
+        // ZASTAV submit, ať se stránka hned nepřesměruje
+        e.preventDefault();
+
+        audio.pause();
+        audio.currentTime = 0;
+        audio.volume = 0.9;
+
+        // Pusť zvuk a pak po krátké době odešli form
+        audio.play().catch(() => {}).finally(() => {
+          setTimeout(() => form.submit(), 2000); // uprav, pokud chceš delší zvuk
+        });
+      });
+    })();
+</script>
 </body>
 </html>

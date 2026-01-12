@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Pokémon</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<main>
+
+    <!-- NAVBAR like index -->
+    <nav class="navbar" th:if="${users != null}">
+        <div class="nav-left">
+      <span class="nav-badge">
+        <span class="nav-dot"></span>
+        <span class="nav-user" th:text="${users.username}"></span>
+      </span>
+        </div>
+
+        <div class="nav-right nav-actions">
+            <a class="btn btn-ghost btn-danger" th:href="@{/pokemonclub}">Sign out</a>
+        </div>
+    </nav>
+
+    <!-- ERROR -->
+    <div class="notice" th:if="${users == null}">
+        <h2>User not loaded</h2>
+        <p class="muted">Please log in again.</p>
+        <a class="btn btn-primary" th:href="@{/loginUser}">Go to login</a>
+    </div>
+
+    <!-- CARD -->
+    <section class="card" th:if="${users != null}">
+        <header class="cardHead">
+            <div class="kicker">ADD POKÉMON</div>
+            <h1 class="title">Choose your next Pokémon</h1>
+            <p class="muted" style="margin:0; text-align:center;">
+                Only Pokémons you don’t have yet are shown.
+            </p>
+        </header>
+
+        <div class="divider"></div>
+
+        <div class="cardInner">
+
+            <!-- EMPTY STATE -->
+            <div class="notice" th:if="${availablePokemons == null or #lists.isEmpty(availablePokemons)}"
+                 style="box-shadow:none; background:transparent; padding:0;">
+                <h2>No available Pokémons</h2>
+                <p class="muted" style="margin:8px 0 14px;">You already have all Pokémons from the list.</p>
+                <a class="btn btn-primary" th:href="@{'/index?name=' + ${users.username}}">Back</a>
+            </div>
+
+            <!-- FORM -->
+            <form th:if="${availablePokemons != null and !#lists.isEmpty(availablePokemons)}"
+                  method="POST"
+                  th:action="@{/addAnotherPokemon}"
+                  class="authForm"
+                  style="max-width:560px; margin:0 auto;">
+
+                <!-- Keep user -->
+                <input type="hidden" name="name" th:value="${users.username}"/>
+
+                <div class="field">
+                    <label for="pokemonId">Select Pokémon</label>
+                    <select id="pokemonId" name="pokemonId" class="input" required>
+                        <option value="" disabled selected>— choose —</option>
+                        <option th:each="p : ${availablePokemons}"
+                                th:value="${p.id}"
+                                th:text="${p.name}">
+                        </option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary btn-block" type="submit">Add Pokémon</button>
+
+                <div class="authLinks" style="margin-top:14px;">
+                    <a class="btn btn-soft" th:href="@{'/index?name=' + ${users.username}}">Back to profile</a>
+                </div>
+            </form>
+
+        </div>
+    </section>
+
+</main>
+</body>
+</html>

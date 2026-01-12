@@ -4,28 +4,41 @@
     <meta charset="UTF-8">
     <title>Register</title>
     <link rel="stylesheet" th:href="@{/styles.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+<main class="authWrap">
 
-<h1>Programmer Fox Club</h1>
-<h2>Registration Page</h2>
+    <div class="authContainer">
+        <img class="authLogo" th:src="@{/charizardBig.png}" alt="Charizard">
 
-<form method="POST" th:action="@{/register}">
-    <div class="form-row">
-        <label for="name">Select Username:</label>
-        <input type="text" id="name" name="name" required>
+        <section class="authCard">
+            <div class="authTitle">Register</div>
 
-        <label for="password">Select password:</label>
-        <input type="password" id="password" name="password" required>
+            <div class="authError" th:if="${error}" th:text="${error}"></div>
 
-        <button class="submitButton" type="submit">GO</button>
+            <form class="authForm" method="POST" th:action="@{/register}">
+                <div class="field">
+                    <label for="name">Choose Username</label>
+                    <input class="input" type="text" id="name" name="name" autocomplete="username" required>
+                </div>
+
+                <div class="field">
+                    <label for="password">Choose Password</label>
+                    <input class="input" type="password" id="password" name="password" autocomplete="new-password" required>
+                </div>
+
+                <button class="btn btn-primary btn-block" type="submit">Create account</button>
+            </form>
+
+            <div class="authLinks">
+                <a class="btn btn-yellow" th:href="@{/pokemonclub}">
+                    Back to main page</a>
+                <a class="btn btn-soft" th:href="@{/loginUser}">I already have an account</a>
+            </div>
+        </section>
     </div>
-</form>
 
-<br>
-
-<img th:src="@{/greenfox.png}" alt="greenFox"><br>
-<a th:href="@{/foxclub}">BACK TO MAIN PAGE</a><br>
-
+</main>
 </body>
 </html>

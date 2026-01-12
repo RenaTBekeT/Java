@@ -1,12 +1,8 @@
 package com.example.programmerfoxclubfinal;
-//import jakarta.persistence.Column;
 
 import jakarta.persistence.*;
-//import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.List;
 import java.util.Set;
@@ -14,28 +10,30 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-public class Fox {
+public class Pokemon {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+
     private String name;
     private String food;
     private String drink;
+    @Column(name = "image_path")
+    private String imagePath;
 
-    @ManyToMany(mappedBy = "fox", fetch = FetchType.LAZY)
+
+    @ManyToMany(mappedBy = "pokemon", fetch = FetchType.LAZY)
     private Set<Tricks> tricks;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-
-    public Fox(String name) {
+    public Pokemon(String name) {
         this.name = name;
-       // this.tricks = tricks;
-        this.food = food;
-        this.drink = drink;
     }
 
-    public Fox() {
+    public Pokemon() {
     }
 
     public String getElements(List<String> list) {
@@ -47,10 +45,12 @@ public class Fox {
 
     @Override
     public String toString() {
-        return "This is fox with: " +
+        return "This is pokemon with: " +
                 "id: " + id +
-                ", his name is " + name + ", he eats " + food + " and he drinks " + drink + " he can do " + tricks +
+                ", his name is " + name +
+                ", he eats " + food +
+                " and he drinks " + drink +
+                " he can do " + tricks +
                 " and name of his user is " + user.getUsername();
     }
 }
-

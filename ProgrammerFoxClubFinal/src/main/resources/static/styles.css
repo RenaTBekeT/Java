@@ -1,289 +1,711 @@
-/* =========================
-   Programmer Fox Club — styles.css
-   Clean, readable, consistent.
-   ========================= */
-
 :root{
-  --bg: #0f172a;            /* slate-900 */
-  --panel: #111c33;         /* custom dark */
-  --panel-2: #0b1326;
-  --text: #e5e7eb;          /* gray-200 */
-  --muted: #9ca3af;         /* gray-400 */
-  --line: rgba(255,255,255,.10);
-  --accent: #fb7185;        /* rose-400 */
-  --accent-2: #38bdf8;      /* sky-400 */
-  --ok: #34d399;            /* emerald-400 */
-  --warn: #fbbf24;          /* amber-400 */
-  --danger: #f87171;        /* red-400 */
+  --bg1:#0b1220;
+  --bg2:#0f1b33;
+  --card:rgba(255,255,255,.92);
+  --card2:rgba(255,255,255,.86);
 
-  --radius: 16px;
-  --radius-sm: 12px;
-  --shadow: 0 10px 30px rgba(0,0,0,.35);
-  --shadow-soft: 0 6px 18px rgba(0,0,0,.25);
-  --maxw: 900px;
+  --text:#0b1220;
+  --muted:rgba(11,18,32,.65);
+
+  --primary:#2563eb;     /* blue */
+  --primary2:#60a5fa;    /* light blue */
+  --accent:#fbbf24;      /* yellow */
+  --danger:#dc2626;
+
+  --border:rgba(11,18,32,.12);
+  --ring:rgba(37,99,235,.35);
+
+  --shadow:0 18px 50px rgba(0,0,0,.35);
+  --shadow2:0 10px 24px rgba(0,0,0,.18);
+
+  --radius:22px;
+  --radius2:16px;
+
+  --maxw:960px;
+
+  /* NOVÉ – pro hezčí rozměry panelů */
+  --panelw:820px;     /* index hlavní panel */
+  --authw:520px;      /* login/register karta */
 }
 
-*{ box-sizing: border-box; }
-
-html, body{ height: 100%; }
-
+*{box-sizing:border-box;}
+html,body{height:100%;}
 body{
-  margin: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-  color: var(--text);
+  margin:0;
+  font-family: "Nunito", system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  min-height:100vh;
+
   background:
-    radial-gradient(1200px 800px at 20% 10%, rgba(56,189,248,.18), transparent 60%),
-    radial-gradient(1000px 700px at 80% 20%, rgba(251,113,133,.18), transparent 55%),
-    radial-gradient(1200px 900px at 50% 100%, rgba(52,211,153,.10), transparent 60%),
-    linear-gradient(180deg, var(--bg), #070b16 85%);
-  line-height: 1.55;
-  padding: 28px 16px 60px;
+    radial-gradient(1200px 700px at 20% 15%, rgba(96,165,250,.22), transparent 60%),
+    radial-gradient(900px 600px at 80% 20%, rgba(251,191,36,.25), transparent 55%),
+    radial-gradient(900px 600px at 60% 90%, rgba(37,99,235,.18), transparent 55%),
+    linear-gradient(180deg, var(--bg1), var(--bg2));
+
+  display:flex;
+  justify-content:center;
+  padding:28px 16px 64px;
 }
 
-/* Center everything without needing extra wrapper divs */
-body > *{
-  max-width: var(--maxw);
-  margin-left: auto;
-  margin-right: auto;
+main{
+  width:100%;
+  max-width:var(--maxw);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:18px;
 }
 
-/* Headings */
-h1{
-  margin: 0 0 12px;
-  font-size: clamp(28px, 3.2vw, 40px);
-  letter-spacing: .2px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* =======================
+   Shared UI pieces
+======================= */
+
+.logo{
+  width:min(520px,92%);
+  filter:drop-shadow(0 20px 26px rgba(0,0,0,.35));
+  margin-top:6px;
 }
 
-h1::before{
-  content: "";
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  box-shadow: 0 0 0 6px rgba(255,255,255,.03);
+.card{
+  width:100%;
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:22px;
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(10px);
+}
+
+.cardInner{
+  background:var(--card2);
+  border:1px solid rgba(11,18,32,.08);
+  border-radius:var(--radius2);
+  padding:18px;
+}
+
+.cardHead{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  align-items:center;
+  text-align:center;
+}
+
+.kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-size:12px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:rgba(37,99,235,.9);
+  font-weight:900;
+}
+
+.title{
+  margin:0;
+  font-size:26px;
+  letter-spacing:.01em;
+  line-height:1.1;
+}
+
+.divider{
+  height:1px;
+  background:rgba(11,18,32,.10);
+  margin:16px 0;
+}
+
+.muted{color:var(--muted);}
+
+/* =======================
+   Navbar
+======================= */
+
+.navbar{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 16px;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  box-shadow:var(--shadow2);
+  backdrop-filter: blur(10px);
+}
+
+.nav-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.16);
+}
+
+.nav-dot{
+  width:10px;
+  height:10px;
+  border-radius:999px;
+  background:linear-gradient(180deg,var(--accent),#fde68a);
+  box-shadow:0 0 0 4px rgba(251,191,36,.22);
+}
+
+.nav-user{
+  font-weight:900;
+  font-size:14px;
+  letter-spacing:.02em;
+  color:rgba(255,255,255,.92);
+}
+
+.nav-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+/* =======================
+   Table
+======================= */
+
+.sectionHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
 }
 
 h2{
-  margin: 10px 0 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: .14em;
+  margin:0;
+  font-size:12px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(37,99,235,.95);
 }
 
-h2[th\\:text] { /* harmless – just to keep it subtle */
-  color: rgba(229,231,235,.92);
+.pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:34px;
+  padding:6px 10px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:12px;
+  color:rgba(11,18,32,.85);
+  background:rgba(251,191,36,.45);
+  border:1px solid rgba(251,191,36,.55);
 }
 
-/* Paragraphs */
-p{
-  margin: 10px 0;
-  color: rgba(229,231,235,.92);
+.tableWrap{
+  overflow:auto;
+  border-radius:14px;
+  border:1px solid rgba(11,18,32,.10);
+  background:rgba(255,255,255,.75);
 }
 
-strong{ color: #fff; }
-
-/* Panels: use table/form default styling as a “panel” feel */
-table, form, .panel{
-  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-soft);
-}
-
-/* Tables */
 table{
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  overflow: hidden;
-  margin: 14px auto 18px;
+  width:100%;
+  border-collapse:collapse;
 }
 
-th, td{
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--line);
-  text-align: left;
-  vertical-align: middle;
+th,td{
+  padding:11px 14px;
+  border-bottom:1px solid rgba(11,18,32,.10);
+  text-align:left;
 }
 
 th{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:rgba(11,18,32,.62);
+  background:rgba(255,255,255,.70);
+}
+
+tr:last-child td{border-bottom:none;}
+
+/* =======================
+   Buttons (unified)
+======================= */
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+
+  text-decoration:none;
+  padding:11px 16px;
+  border-radius:14px;
+
+  font-weight:900;
+  letter-spacing:.02em;
+
+  border:1px solid rgba(11,18,32,.12);
+  background:rgba(255,255,255,.92);
+  color:rgba(11,18,32,.92);
+
+  box-shadow:0 10px 24px rgba(0,0,0,.16);
+  transition: transform .12s ease, box-shadow .12s ease, filter .12s ease, background .12s ease;
+}
+
+.btn:hover{
+  transform: translateY(-1px);
+  box-shadow:0 14px 32px rgba(0,0,0,.22);
+  filter: brightness(1.02);
+}
+
+.btn:active{
+  transform: translateY(0px);
+  box-shadow:0 10px 24px rgba(0,0,0,.16);
+}
+
+.btn-block{width:100%;}
+
+.btn-primary{
+  background: linear-gradient(180deg, var(--primary2), var(--primary));
+  color: white;
+  border-color: rgba(37,99,235,.30);
+}
+
+.btn-soft{
+  background: rgba(37,99,235,.10);
+  border-color: rgba(37,99,235,.20);
+  color: rgba(11,18,32,.92);
+}
+
+.btn-ghost{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.18);
+  color: rgba(255,255,255,.92);
+  box-shadow: none;
+}
+
+.btn-danger{
+  border-color: rgba(220,38,38,.35);
+}
+.btn.btn-ghost.btn-danger:hover{
+  background: rgba(220,38,38,.14);
+  border-color: rgba(220,38,38,.40);
+}
+
+/* =======================
+   Notice
+======================= */
+
+.notice{
+  width:100%;
+  background:rgba(255,255,255,.92);
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:var(--shadow);
+  text-align:center;
+}
+
+.notice p{
+  margin:8px 0 14px;
+}
+
+/* =======================
+   Auth pages (LOGIN / REGISTER) – MENŠÍ + CENTROVANÉ
+======================= */
+
+.authWrap{
+  width:100%;
+  max-width: var(--authw);
+  margin:0 auto;
+  display:flex;
+  justify-content:center;
+}
+
+.authContainer{
+  width:100%;
+  margin-top:36px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.authLogo{
+  width: 300px;             /* menší než dřív */
+  max-width: 88vw;
+  height:auto;
+  display:block;
+
+  margin-top: 24px;
+  margin-bottom: 14px;
+
+  z-index:2;
+  filter: drop-shadow(0 22px 24px rgba(0,0,0,.45));
+}
+
+.authCard{
+  width:100%;
+  max-width: var(--authw);
+  background:rgba(255,255,255,.92);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding: 26px 20px 18px;
+  text-align:center;
+  position:relative;
+  z-index:1;
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(10px);
+}
+
+.authTitle{
+  margin: 6px 0 14px;
+  font-size: 12px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: rgba(37,99,235,.95);
+  font-weight: 1000;
+}
+
+.authError{
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(220,38,38,.08);
+  border: 1px solid rgba(220,38,38,.22);
+  color: rgba(11,18,32,.85);
+  font-weight: 900;
+  text-align:left;
+}
+
+.authForm{
+  text-align:left;
+  display:flex;
+  flex-direction:column;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.field label{
+  display:block;
+  margin:0 0 8px;
+  font-size: 13px;
+  color: rgba(11,18,32,.78);
+  font-weight: 900;
+  letter-spacing:.02em;
+}
+
+.input{
+  width:100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(11,18,32,.14);
+  background: rgba(255,255,255,.94);
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+  outline: none;
+  font-weight: 800;
+  letter-spacing:.01em;
+  transition: box-shadow .12s ease, border-color .12s ease, transform .12s ease;
+}
+
+.input:focus{
+  border-color: rgba(37,99,235,.38);
+  box-shadow: 0 0 0 4px var(--ring), 0 14px 30px rgba(0,0,0,.14);
+  transform: translateY(-1px);
+}
+
+.authLinks{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  margin-top: 16px;
+}
+
+img{
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+select.input{
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, rgba(11,18,32,.55) 50%),
+                    linear-gradient(135deg, rgba(11,18,32,.55) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 40px;
+}
+
+/* =======================
+   Welcome page additions
+======================= */
+
+.welcomeLogo{
+  width:min(680px, 96%);
+  margin-top: 4px;
+  filter: drop-shadow(0 22px 26px rgba(0,0,0,.38));
+}
+
+.welcomeBanner{
+  width:min(820px, 96%);
+  height:auto;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  filter: drop-shadow(0 18px 22px rgba(0,0,0,.28));
+}
+
+.starters{
+  width:100%;
+  display:flex;
+  gap:14px;
+  align-items:stretch;
+  justify-content:space-between;
+  margin-top: 8px;
+}
+
+.starterImg{
+  width: calc((100% - 28px)/3);
+  height: 320px;
+  object-fit: contain;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  border-radius: 0;
+  filter: drop-shadow(0 18px 22px rgba(0,0,0,.28));
+}
+
+/* Responsive */
+@media (max-width: 820px){
+  .starterImg{height: 260px;}
+}
+@media (max-width: 620px){
+  .starters{ flex-direction:column; }
+  .starterImg{ width:100%; height: 220px; }
+  .welcomeBanner{ padding: 0; }
+  .navbar{ border-radius:18px; padding:10px 12px; }
+}
+
+/* Small screens */
+@media (max-width: 520px){
+  .title{font-size:24px;}
+  .authLogo{width: 240px;}
+}
+
+/* =======================
+   INDEX – MENŠÍ PANEL + 2 SLOUPCE (pokémoni vlevo, catch vpravo)
+======================= */
+
+.card.dashboard{
+  max-width: var(--panelw);
+  margin: 0 auto;
+}
+
+.dashboardGrid{
+  display:grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap:14px;
+}
+
+@media (max-width: 860px){
+  .card.dashboard{ max-width: 92vw; }
+  .dashboardGrid{ grid-template-columns: 1fr; }
+}
+
+.actions{
+  justify-content:flex-start;
+}
+
+/* =======================
+   Hover pokemon card (fixed center)
+======================= */
+
+.pokeHover{
+  position: relative;
+  display: inline-block;
+}
+
+.pokeName{
+  font-weight: 900;
+  cursor: default;
+  color: inherit;
+  border: none;
+  text-decoration: none;
+}
+
+/* karta fixně uprostřed */
+.pokeCard{
+  position: fixed;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%) scale(.98);
+
+  width: 520px;
+  max-width: 92vw;
+
+  background: white;
+  border-radius: 22px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.45);
+  padding: 16px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: .14s ease;
+  z-index: 999;
+}
+
+.pokeHover:hover .pokeCard{
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.pokeCard img{
+  width: 100%;
+  height: 360px;
+  object-fit: contain;
+  display: block;
+}
+
+.pokeCardTitle{
+  text-align: center;
+  font-weight: 900;
   font-size: 12px;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: rgba(229,231,235,.78);
-  background: rgba(0,0,0,.18);
+  color: #1f2937;
 }
-
-tr:last-child td{ border-bottom: 0; }
-
-tr:hover td{
-  background: rgba(56,189,248,.06);
-}
-
-/* Forms */
-form{
-  padding: 16px;
-  margin: 14px auto 18px;
-}
-
-label{
-  display: block;
-  font-size: 13px;
-  color: rgba(229,231,235,.82);
-  margin: 10px 0 6px;
-}
-
-input[type="text"],
-input[type="password"],
-select{
-  width: 100%;
-  padding: 11px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.22);
-  color: var(--text);
-  outline: none;
-  transition: border-color .15s ease, box-shadow .15s ease, transform .05s ease;
-}
-
-select{
-  cursor: pointer;
-}
-
-input:focus,
-select:focus{
-  border-color: rgba(56,189,248,.55);
-  box-shadow: 0 0 0 4px rgba(56,189,248,.12);
-}
-
-input:active,
-select:active{
-  transform: translateY(1px);
-}
-
-/* Buttons */
-button,
-input[type="submit"]{
-  display: inline-flex;
+/* USER HEADER LAYOUT */
+.userHeader{
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 14px;
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.16);
-  background: linear-gradient(135deg, rgba(251,113,133,.85), rgba(56,189,248,.75));
-  color: #0b1020;
-  font-weight: 700;
-  letter-spacing: .02em;
-  cursor: pointer;
-  box-shadow: 0 10px 20px rgba(0,0,0,.25);
-  transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+  text-align: left;
 }
 
-button:hover,
-input[type="submit"]:hover{
-  filter: brightness(1.04);
-  transform: translateY(-1px);
-  box-shadow: 0 14px 28px rgba(0,0,0,.30);
+.userInfo{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
 }
 
-button:active,
-input[type="submit"]:active{
-  transform: translateY(0px);
+.userAvatar img{
+  width:96px;
+  height:96px;
+  border-radius:18px;
+
+  object-fit: cover;
+  object-position: top center; /* ← TADY */
+
+  border:3px solid rgba(37,99,235,.35);
+  box-shadow:0 14px 32px rgba(0,0,0,.28);
+}
+.authCard .btn-ghost{
+  color: rgba(11,18,32,.85);
+}
+.authCard .btn-ghost:hover{
+  background: rgba(11,18,32,.06);
+}
+.btn-yellow{
+  background: linear-gradient(180deg, #fde68a, #fbbf24);
+  color: #1f2937;
+  border: 1px solid rgba(251,191,36,.6);
 }
 
-/* Links */
-a{
-  color: rgba(229,231,235,.92);
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.03);
-  margin: 6px 6px 0 0;
-  transition: transform .12s ease, background .12s ease, border-color .12s ease;
+.btn-yellow:hover{
+  background: linear-gradient(180deg, #fcd34d, #f59e0b);
+  color: #111827;
+}
+/* ===== INDEX LAYOUT ===== */
+
+.indexLayout{
+  width:100%;
+  display:grid;
+  grid-template-columns: 380px 1fr; /* pevná levá strana */
+  gap: 32px;
+  align-items: start;
 }
 
-a:hover{
-  background: rgba(56,189,248,.08);
-  border-color: rgba(56,189,248,.25);
-  transform: translateY(-1px);
+/* LEVÁ STRANA */
+.mewtwoSide{
+  height: calc(100vh - 56px);   /* dá prostoru pro obrázek */
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  overflow:hidden;
 }
 
-a:active{
-  transform: translateY(0);
-}
-
-/* Make “SIGN OUT” feel more dangerous but still consistent */
-a[href*="foxclub"]{
-  border-color: rgba(248,113,113,.25);
-  background: rgba(248,113,113,.06);
-}
-a[href*="foxclub"]:hover{
-  background: rgba(248,113,113,.10);
-  border-color: rgba(248,113,113,.35);
-}
-
-/* Images */
-img{
-  display: block;
-  max-width: 170px;
-  width: 100%;
-  height: auto;
-  margin: 16px auto 6px;
-  filter: drop-shadow(0 16px 20px rgba(0,0,0,.35));
+.mewtwoSide img{
+  width: 100%;                  /* ať vyplní levý sloupec */
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 30px 60px rgba(0,0,0,.45));
   opacity: .95;
 }
 
-/* Lists */
-ul{
-  list-style: none;
-  padding: 0;
-  margin: 12px auto 18px;
-  max-width: var(--maxw);
+/* PRAVÁ STRANA */
+.contentSide{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:18px;
+}
+/* === BACKGROUND POKEMON (DECORATION) === */
+.bgPokemon{
+  position: fixed;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.bgLeft{
+  left: -90px;
+}
+.bgPokemon img{
+  height: 88vh;
+  max-width: 60vh;
+  opacity: .95;
+  filter: drop-shadow(0 40px 80px rgba(0,0,0,.55));
 }
 
-li{
-  padding: 10px 12px;
-  margin: 8px 0;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.03);
+/* obsah vždy nad dekorací */
+main{
+  position: relative;
+  z-index: 2;
+}
+/* PRAVÁ STRANA */
+.contentSide{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:18px;
+}
+/* === BACKGROUND POKEMON (DECORATION) === */
+.bgPokemon1{
+  position: fixed;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.bgRight{
+  right: -90px;
+}
+.bgPokemon1 img{
+  height: 88vh;
+  max-width: 60vh;
+  opacity: .95;
+  filter: drop-shadow(0 40px 80px rgba(0,0,0,.55));
 }
 
-/* Small helper for error message line we added in LoginUser.html */
-p[th\\:if][th\\:text]{
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(248,113,113,.22);
-  background: rgba(248,113,113,.08);
-  color: rgba(255,255,255,.95);
-}
-
-/* Better spacing for simple pages (Welcome/Register/Login) */
-body > h1 + h2{
-  margin-top: 0;
-}
-
-/* Responsive tweaks */
-@media (max-width: 520px){
-  body{
-    padding: 18px 12px 44px;
-  }
-  a{
-    width: 100%;
-    justify-content: center;
-  }
-  img{
-    max-width: 150px;
-  }
+/* obsah vždy nad dekorací */
+main{
+  position: relative;
+  z-index: 2;
 }

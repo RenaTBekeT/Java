@@ -4,15 +4,41 @@
     <meta charset="UTF-8">
     <title>Welcome</title>
     <link rel="stylesheet" th:href="@{/styles.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 
-<h1>Welcome to Programmer Fox Club</h1>
+<main>
 
-<a th:href="@{/loginUser}">LOGIN</a><br>
-<a th:href="@{/register}">REGISTER</a><br><br>
+    <!-- NAVBAR (same style as index, but with Login + Register) -->
+    <nav class="navbar">
+        <div class="nav-left">
+      <span class="nav-badge">
+        <span class="nav-dot"></span>
+        <span class="nav-user">Programmer Pokémon Club</span>
+      </span>
+        </div>
 
-<img th:src="@{/greenfox.png}" alt="greenFox">
+        <div class="nav-right nav-actions">
+            <a class="btn btn-ghost" th:href="@{/loginUser}">Login</a>
+            <a class="btn btn-primary" th:href="@{/register}">Register</a>
+        </div>
+    </nav>
+
+    <!-- BIG LOGO -->
+    <img class="welcomeLogo" th:src="@{/logo.svg.png}" alt="Logo">
+
+    <!-- BANNER -->
+    <img class="welcomeBanner" th:src="@{/gottacatch.png}" alt="Gotta catch">
+
+    <!-- STARTERS -->
+    <section class="starters">
+        <img class="starterImg" th:src="@{/bulbasaurBig.png}" alt="BulbasaurBig">
+        <img class="starterImg" th:src="@{/charmanderBig.png}" alt="CharmanderBig">
+        <img class="starterImg" th:src="@{/squirtleBig.png}" alt="SquirtleBig">
+    </section>
+
+</main>
 
 </body>
 </html>

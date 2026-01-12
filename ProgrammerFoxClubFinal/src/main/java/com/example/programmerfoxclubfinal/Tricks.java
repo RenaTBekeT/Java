@@ -15,13 +15,13 @@ public class Tricks {
 
     @ManyToMany
     // @JoinColumn(name = "fox_id")
-    private Set<Fox> fox;
+    private Set<Pokemon> pokemon;
 
     public String getNameOfTrick() {
         return nameOfTrick;
     }
 
-    public void setFox(Optional<Fox> fox) {
+    public void setPokemon(Optional<Pokemon> pokemon) {
     }
 
     @Override
