@@ -7,6 +7,7 @@ import com.example.programmerfoxclubfinal.Repository.UsersRepository;
 import com.example.programmerfoxclubfinal.Tricks;
 import com.example.programmerfoxclubfinal.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,15 +37,11 @@ public class PokemonService {
 
     public User register(String name, String password) {
         if (usersRepository.countByUsername(name) > 0) {
-            return null; // existuje (i kdyby tam byly duplicity)
+            return null;
         }
 
         User user = new User(name, password);
         usersRepository.save(user);
-
-//        Pokemon newPokemon = new Pokemon();
-//        newPokemon.setUser(user);
-//        pokemonRepository.save(newPokemon);
 
         try {
             if (user.getPokemon() != null) {
@@ -54,8 +51,6 @@ public class PokemonService {
 
         return user;
     }
-
-
 
     public boolean isUser(String name, String password) {
         User user = usersRepository.findByUsername(name);
@@ -101,29 +96,10 @@ public class PokemonService {
             if (trick.getPokemon() != null && !trick.getPokemon().contains(pokemon)) {
                 trick.getPokemon().add(pokemon);
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) { }
 
         pokemonRepository.save(pokemon);
         trickRepository.save(trick);
-    }
-
-    // OLD METHOD (keep if something else calls it)
-    public void addAnotherPokemon(String username) {
-        User user = usersRepository.findByUsername(username);
-        if (user == null) return;
-
-        Pokemon newPokemon = new Pokemon();
-        newPokemon.setUser(user);
-        pokemonRepository.save(newPokemon);
-
-        try {
-            if (user.getPokemons() != null) {
-                user.getPokemons().add(newPokemon);
-                usersRepository.save(user);
-            }
-        } catch (Exception ignored) {
-        }
     }
 
     // NEW METHOD: add selected name
@@ -135,7 +111,6 @@ public class PokemonService {
         newPokemon.setUser(user);
         newPokemon.setName(pokemonName);
 
-        // přiřazení obrázku podle jména
         if (pokemonName != null) {
             switch (pokemonName.trim().toLowerCase()) {
                 case "pikachu":
@@ -161,18 +136,34 @@ public class PokemonService {
         pokemonRepository.save(newPokemon);
 
         try {
-            if (user.getPokemons() != null) {
+            if (user.getPokemons() != null) {         // pokud máš getPokemons()
                 user.getPokemons().add(newPokemon);
                 usersRepository.save(user);
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) { }
     }
 
+    // ✅ DELETE (jen pro daného usera)
+    @Transactional
+    public void deletePokemonForUser(String username, Long pokemonId) {
+        User user = usersRepository.findByUsername(username);
+        if (user == null) return;
 
+        Pokemon pokemon = pokemonRepository.findByIdAndUser(pokemonId, user).orElse(null);
+        if (pokemon == null) return; // nepatří userovi / neexistuje
+
+        // pro jistotu odpoj z kolekce usera (když ji máš)
+        try {
+            if (user.getPokemons() != null) {
+                user.getPokemons().removeIf(p -> p.getId() != null && p.getId().equals(pokemonId));
+            }
+        } catch (Exception ignored) { }
+
+        pokemonRepository.delete(pokemon);
+    }
 
     private Pokemon getOrCreatePrimaryPokemon(User user) {
-        Collection<Pokemon> pokemons = user.getPokemon();
+        Collection<Pokemon> pokemons = user.getPokemon(); // nechávám jak máš
         if (pokemons != null && !pokemons.isEmpty()) {
             return new ArrayList<>(pokemons).get(0);
         }
@@ -186,8 +177,7 @@ public class PokemonService {
                 user.getPokemon().add(pokemon);
                 usersRepository.save(user);
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) { }
 
         return pokemon;
     }

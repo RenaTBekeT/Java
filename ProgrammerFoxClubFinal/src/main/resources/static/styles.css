@@ -7,9 +7,9 @@
   --text:#0b1220;
   --muted:rgba(11,18,32,.65);
 
-  --primary:#2563eb;     /* blue */
-  --primary2:#60a5fa;    /* light blue */
-  --accent:#fbbf24;      /* yellow */
+  --primary:#2563eb;
+  --primary2:#60a5fa;
+  --accent:#fbbf24;
   --danger:#dc2626;
 
   --border:rgba(11,18,32,.12);
@@ -23,16 +23,16 @@
 
   --maxw:960px;
 
-  /* NOVÉ – pro hezčí rozměry panelů */
-  --panelw:820px;     /* index hlavní panel */
-  --authw:520px;      /* login/register karta */
+  --panelw:760px;   /* index hlavní panel (menší a víc uprostřed) */
+  --authw:520px;    /* login/register karta */
 }
 
 *{box-sizing:border-box;}
 html,body{height:100%;}
+
 body{
   margin:0;
-  font-family: "Nunito", system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  font-family:"Nunito",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   color:var(--text);
   min-height:100vh;
 
@@ -44,7 +44,7 @@ body{
 
   display:flex;
   justify-content:center;
-  padding:28px 16px 64px;
+  padding:28px 16px 96px; /* víc prostoru dole */
 }
 
 main{
@@ -54,7 +54,13 @@ main{
   flex-direction:column;
   align-items:center;
   gap:18px;
+
+  position:relative;
+  z-index:2;
+  padding-bottom:40px; /* jemný prostor navíc dole */
 }
+
+img{max-width:100%; height:auto; display:block;}
 
 /* =======================
    Shared UI pieces
@@ -80,7 +86,7 @@ main{
   background:var(--card2);
   border:1px solid rgba(11,18,32,.08);
   border-radius:var(--radius2);
-  padding:18px;
+  padding:24px 24px 40px;
 }
 
 .cardHead{
@@ -159,12 +165,6 @@ main{
   color:rgba(255,255,255,.92);
 }
 
-.nav-actions{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-
 /* =======================
    Table
 ======================= */
@@ -200,17 +200,36 @@ h2{
 }
 
 .tableWrap{
-  overflow:auto;
+  height: 260px;              /* 🔒 FIXNÍ výška */
+  overflow-y: auto;
+  overflow-x: hidden;
+
   border-radius:14px;
   border:1px solid rgba(11,18,32,.10);
   background:rgba(255,255,255,.75);
 }
-
 table{
   width:100%;
   border-collapse:collapse;
 }
 
+thead{
+  display: table;
+  width:100%;
+  table-layout: fixed;
+}
+
+tbody{
+  display: block;             /* 🔥 ZLOM */
+  height: 200px;              /* ← zbytek prostoru */
+  overflow-y: auto;
+}
+
+tbody tr{
+  display: table;
+  width:100%;
+  table-layout: fixed;
+}
 th,td{
   padding:11px 14px;
   border-bottom:1px solid rgba(11,18,32,.10);
@@ -228,7 +247,7 @@ th{
 tr:last-child td{border-bottom:none;}
 
 /* =======================
-   Buttons (unified)
+   Buttons
 ======================= */
 
 .btn{
@@ -284,12 +303,20 @@ tr:last-child td{border-bottom:none;}
   box-shadow: none;
 }
 
-.btn-danger{
-  border-color: rgba(220,38,38,.35);
-}
+.btn-danger{border-color: rgba(220,38,38,.35);}
 .btn.btn-ghost.btn-danger:hover{
   background: rgba(220,38,38,.14);
   border-color: rgba(220,38,38,.40);
+}
+
+.btn-yellow{
+  background: linear-gradient(180deg, #fde68a, #fbbf24);
+  color: #1f2937;
+  border: 1px solid rgba(251,191,36,.6);
+}
+.btn-yellow:hover{
+  background: linear-gradient(180deg, #fcd34d, #f59e0b);
+  color: #111827;
 }
 
 /* =======================
@@ -304,13 +331,10 @@ tr:last-child td{border-bottom:none;}
   box-shadow:var(--shadow);
   text-align:center;
 }
-
-.notice p{
-  margin:8px 0 14px;
-}
+.notice p{margin:8px 0 14px;}
 
 /* =======================
-   Auth pages (LOGIN / REGISTER) – MENŠÍ + CENTROVANÉ
+   Auth pages
 ======================= */
 
 .authWrap{
@@ -330,14 +354,11 @@ tr:last-child td{border-bottom:none;}
 }
 
 .authLogo{
-  width: 300px;             /* menší než dřív */
+  width: 300px;
   max-width: 88vw;
   height:auto;
-  display:block;
-
   margin-top: 24px;
   margin-bottom: 14px;
-
   z-index:2;
   filter: drop-shadow(0 22px 24px rgba(0,0,0,.45));
 }
@@ -420,88 +441,25 @@ tr:last-child td{border-bottom:none;}
   margin-top: 16px;
 }
 
-img{
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
 select.input{
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, rgba(11,18,32,.55) 50%),
-                    linear-gradient(135deg, rgba(11,18,32,.55) 50%, transparent 50%);
+  appearance:none;
+  -webkit-appearance:none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgba(11,18,32,.55) 50%),
+    linear-gradient(135deg, rgba(11,18,32,.55) 50%, transparent 50%);
   background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
   background-size: 6px 6px, 6px 6px;
-  background-repeat: no-repeat;
-  padding-right: 40px;
+  background-repeat:no-repeat;
+  padding-right:40px;
 }
 
 /* =======================
-   Welcome page additions
-======================= */
-
-.welcomeLogo{
-  width:min(680px, 96%);
-  margin-top: 4px;
-  filter: drop-shadow(0 22px 26px rgba(0,0,0,.38));
-}
-
-.welcomeBanner{
-  width:min(820px, 96%);
-  height:auto;
-  border: none;
-  box-shadow: none;
-  background: transparent;
-  padding: 0;
-  border-radius: 0;
-  filter: drop-shadow(0 18px 22px rgba(0,0,0,.28));
-}
-
-.starters{
-  width:100%;
-  display:flex;
-  gap:14px;
-  align-items:stretch;
-  justify-content:space-between;
-  margin-top: 8px;
-}
-
-.starterImg{
-  width: calc((100% - 28px)/3);
-  height: 320px;
-  object-fit: contain;
-  border: none;
-  box-shadow: none;
-  background: transparent;
-  border-radius: 0;
-  filter: drop-shadow(0 18px 22px rgba(0,0,0,.28));
-}
-
-/* Responsive */
-@media (max-width: 820px){
-  .starterImg{height: 260px;}
-}
-@media (max-width: 620px){
-  .starters{ flex-direction:column; }
-  .starterImg{ width:100%; height: 220px; }
-  .welcomeBanner{ padding: 0; }
-  .navbar{ border-radius:18px; padding:10px 12px; }
-}
-
-/* Small screens */
-@media (max-width: 520px){
-  .title{font-size:24px;}
-  .authLogo{width: 240px;}
-}
-
-/* =======================
-   INDEX – MENŠÍ PANEL + 2 SLOUPCE (pokémoni vlevo, catch vpravo)
+   INDEX layout / sizes
 ======================= */
 
 .card.dashboard{
   max-width: var(--panelw);
-  margin: 0 auto;
+  margin: 40px auto 0; /* víc uprostřed + níž */
 }
 
 .dashboardGrid{
@@ -515,12 +473,55 @@ select.input{
   .dashboardGrid{ grid-template-columns: 1fr; }
 }
 
-.actions{
-  justify-content:flex-start;
+/* USER HEADER */
+.userHeader{
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+}
+
+.userInfo{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.userAvatar img{
+  width:96px;
+  height:96px;
+  border-radius:18px;
+  object-fit: cover;
+  object-position: top center;
+  border:3px solid rgba(37,99,235,.35);
+  box-shadow:0 14px 32px rgba(0,0,0,.28);
 }
 
 /* =======================
-   Hover pokemon card (fixed center)
+   Background pokemon decorations
+======================= */
+
+.bgPokemon, .bgPokemon1{
+  position: fixed;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bgLeft{ left: -90px; }
+.bgRight{ right: -90px; }
+
+/* mírně menší, aby byly celé vidět */
+.bgPokemon img,
+.bgPokemon1 img{
+  height: 78vh;        /* bylo 88vh */
+  max-width: 52vh;     /* bylo 60vh */
+  opacity: .95;
+  filter: drop-shadow(0 40px 80px rgba(0,0,0,.55));
+}
+
+/* =======================
+   Hover pokemon card
 ======================= */
 
 .pokeHover{
@@ -570,9 +571,8 @@ select.input{
 
 .pokeCard img{
   width: 100%;
-  height: 360px;
+  height: 280px; /* menší, aby byl pokémon celý */
   object-fit: contain;
-  display: block;
 }
 
 .pokeCardTitle{
@@ -583,129 +583,121 @@ select.input{
   text-transform: uppercase;
   color: #1f2937;
 }
-/* USER HEADER LAYOUT */
-.userHeader{
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  text-align: left;
-}
 
-.userInfo{
+/* =======================
+   Pokemon row + play button (name left, play right)
+======================= */
+
+.pokeRow{
   display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-
-.userAvatar img{
-  width:96px;
-  height:96px;
-  border-radius:18px;
-
-  object-fit: cover;
-  object-position: top center; /* ← TADY */
-
-  border:3px solid rgba(37,99,235,.35);
-  box-shadow:0 14px 32px rgba(0,0,0,.28);
-}
-.authCard .btn-ghost{
-  color: rgba(11,18,32,.85);
-}
-.authCard .btn-ghost:hover{
-  background: rgba(11,18,32,.06);
-}
-.btn-yellow{
-  background: linear-gradient(180deg, #fde68a, #fbbf24);
-  color: #1f2937;
-  border: 1px solid rgba(251,191,36,.6);
-}
-
-.btn-yellow:hover{
-  background: linear-gradient(180deg, #fcd34d, #f59e0b);
-  color: #111827;
-}
-/* ===== INDEX LAYOUT ===== */
-
-.indexLayout{
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
   width:100%;
-  display:grid;
-  grid-template-columns: 380px 1fr; /* pevná levá strana */
-  gap: 32px;
-  align-items: start;
 }
 
-/* LEVÁ STRANA */
-.mewtwoSide{
-  height: calc(100vh - 56px);   /* dá prostoru pro obrázek */
-  display:flex;
-  align-items:flex-end;
+.pokePlay{
+  width:30px;
+  height:30px;
+  border-radius:10px;
+  border:1px solid rgba(11,18,32,.18);
+  background: rgba(251,191,36,.85);
+  font-weight: 1000;
+  cursor:pointer;
+  box-shadow: 0 8px 18px rgba(0,0,0,.16);
+  display:inline-flex;
+  align-items:center;
   justify-content:center;
-  overflow:hidden;
+  line-height:1;
+  flex: 0 0 auto;
 }
 
-.mewtwoSide img{
-  width: 100%;                  /* ať vyplní levý sloupec */
-  height: 100%;
+.pokePlay:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(0,0,0,.22);
+}
+
+/* =======================
+   Catch overlay
+======================= */
+
+.catchOverlay{
+  position: fixed;
+  inset: 0;
+  display: none;              /* důležité: neviditelné dokud není active */
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.55);
+  z-index: 9999;
+}
+
+.catchOverlay.active{ display:flex; }
+
+.catchBox{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+}
+
+.catchText{
+  color:#fff;
+  font-weight:800;
+  letter-spacing:1px;
+  opacity:.85;
+}
+/* STARTERS – vždy vedle sebe a menší (přebije globální img pravidlo) */
+.starters{
+  display: flex !important;
+  gap: 14px;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.starterImg{
+  display: inline-block !important;   /* přebije img{display:block} */
+  width: calc((100% - 28px)/3);
+  height: 240px;                      /* MENŠÍ než dřív */
   object-fit: contain;
-  filter: drop-shadow(0 30px 60px rgba(0,0,0,.45));
-  opacity: .95;
 }
-
-/* PRAVÁ STRANA */
-.contentSide{
+.welcomeLogo{
+  width: min(800px, 96%);
+  margin-top: 4px;
+  filter: drop-shadow(0 22px 26px rgba(0,0,0,.38));
+}
+/* pravá strana v řádku: Play + Delete */
+.pokeActions{
   display:flex;
-  flex-direction:column;
   align-items:center;
-  gap:18px;
-}
-/* === BACKGROUND POKEMON (DECORATION) === */
-.bgPokemon{
-  position: fixed;
-  bottom: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-.bgLeft{
-  left: -90px;
-}
-.bgPokemon img{
-  height: 88vh;
-  max-width: 60vh;
-  opacity: .95;
-  filter: drop-shadow(0 40px 80px rgba(0,0,0,.55));
+  gap:10px;
+  padding-right: 6px; /* ✅ tím se celé tlačítka malinko posunou doleva od okraje */
 }
 
-/* obsah vždy nad dekorací */
-main{
-  position: relative;
-  z-index: 2;
-}
-/* PRAVÁ STRANA */
-.contentSide{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:18px;
-}
-/* === BACKGROUND POKEMON (DECORATION) === */
-.bgPokemon1{
-  position: fixed;
-  bottom: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-.bgRight{
-  right: -90px;
-}
-.bgPokemon1 img{
-  height: 88vh;
-  max-width: 60vh;
-  opacity: .95;
-  filter: drop-shadow(0 40px 80px rgba(0,0,0,.55));
+/* aby form nezabíral divné místo */
+.pokeDeleteForm{
+  margin:0;
 }
 
-/* obsah vždy nad dekorací */
-main{
-  position: relative;
-  z-index: 2;
+/* delete button */
+.pokeDelete{
+  width:30px;
+  height:30px;
+  border-radius:10px;
+  border:1px solid rgba(220,38,38,.35);
+  background: rgba(220,38,38,.12);
+  color: rgba(220,38,38,.95);
+  font-weight: 1000;
+  cursor:pointer;
+  box-shadow: 0 8px 18px rgba(0,0,0,.12);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+}
+
+.pokeDelete:hover{
+  transform: translateY(-1px);
+  background: rgba(220,38,38,.18);
+  box-shadow: 0 12px 26px rgba(0,0,0,.18);
 }

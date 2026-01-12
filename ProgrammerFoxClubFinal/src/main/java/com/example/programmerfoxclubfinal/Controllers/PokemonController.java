@@ -3,6 +3,9 @@ package com.example.programmerfoxclubfinal.Controllers;
 import com.example.programmerfoxclubfinal.Pokemon;
 import com.example.programmerfoxclubfinal.Repository.PokemonRepository;
 import com.example.programmerfoxclubfinal.Repository.TrickRepository;
+import com.example.programmerfoxclubfinal.Pokemon;
+import com.example.programmerfoxclubfinal.Repository.PokemonRepository;
+import com.example.programmerfoxclubfinal.Repository.TrickRepository;
 import com.example.programmerfoxclubfinal.Repository.UsersRepository;
 import com.example.programmerfoxclubfinal.Services.PokemonService;
 import com.example.programmerfoxclubfinal.User;
@@ -31,14 +34,10 @@ public class PokemonController {
         this.trickRepository = trickRepository;
     }
 
-    // -------------------- WELCOME --------------------
-
     @GetMapping("/pokemonclub")
     public String welcomePage() {
         return "WelcomePage";
     }
-
-    // -------------------- REGISTER --------------------
 
     @GetMapping("/register")
     public String registerPage() {
@@ -60,9 +59,6 @@ public class PokemonController {
         return "redirect:/chooseProfilePicture?name=" + name;
     }
 
-
-    // -------------------- LOGIN --------------------
-
     @GetMapping("/loginUser")
     public String loginUserPage() {
         return "LoginUser";
@@ -78,8 +74,6 @@ public class PokemonController {
         model.addAttribute("error", "Invalid username or password");
         return "LoginUser";
     }
-
-    // -------------------- DASHBOARD --------------------
 
     @GetMapping("/index")
     public String indexPage(@RequestParam("name") String name, Model model) {
@@ -97,9 +91,6 @@ public class PokemonController {
 
         return "index";
     }
-
-
-    // -------------------- NUTRITION --------------------
 
     @GetMapping("/nutritionStore")
     public String nutritionPage(@RequestParam String name, Model model) {
@@ -128,8 +119,6 @@ public class PokemonController {
         return "redirect:/index?name=" + name;
     }
 
-    // -------------------- SET POKEMON NAME --------------------
-
     @GetMapping("/setName")
     public String setNamePage(@RequestParam String name, Model model) {
         User users = usersRepository.findByUsername(name);
@@ -154,8 +143,6 @@ public class PokemonController {
         pokemonService.updatePokemonName(setName, name);
         return "redirect:/index?name=" + name;
     }
-
-    // -------------------- TRICKS --------------------
 
     @GetMapping("/setTricks")
     public String setTricksPage(@RequestParam String name, Model model) {
@@ -183,9 +170,6 @@ public class PokemonController {
         return "redirect:/index?name=" + name;
     }
 
-    // -------------------- POKEMON MANAGEMENT --------------------
-    // NEW: POST add from select (instead of GET random/empty)
-
     @PostMapping("/addAnotherPokemon")
     public String addAnotherPokemon(@RequestParam String name,
                                     @RequestParam String pokemonName) {
@@ -197,7 +181,17 @@ public class PokemonController {
         return "redirect:/index?name=" + name;
     }
 
-    // -------------------- HELPERS --------------------
+    // ✅ DELETE endpoint
+    @PostMapping("/deletePokemon")
+    public String deletePokemon(@RequestParam("name") String name,
+                                @RequestParam("pokemonId") Long pokemonId) {
+        if (usersRepository.findByUsername(name) == null) {
+            return "redirect:/loginUser";
+        }
+
+        pokemonService.deletePokemonForUser(name, pokemonId);
+        return "redirect:/index?name=" + name;
+    }
 
     private Pokemon firstPokemonOrNull(Collection<Pokemon> pokemons) {
         if (pokemons == null || pokemons.isEmpty()) {
@@ -218,10 +212,9 @@ public class PokemonController {
         User user = usersRepository.findByUsername(name);
         if (user == null) return "redirect:/loginUser";
 
-        user.setProfileImagePath("/" + avatar); // uložíš cestu pro <img src="...">
+        user.setProfileImagePath("/" + avatar);
         usersRepository.save(user);
 
         return "redirect:/index?name=" + name;
     }
-
 }

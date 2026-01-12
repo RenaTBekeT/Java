@@ -28,7 +28,7 @@
           <input class="input" type="password" id="password" name="password" autocomplete="current-password" required>
         </div>
 
-        <button id="loginBtn" class="btn btn-primary btn-block" type="button">Go</button>
+        <button id="loginBtn" class="btn btn-primary btn-block" type="submit">Go</button>
       </form>
 
       <div class="authLinks">
@@ -39,27 +39,5 @@
     </section>
   </div>
 </main>
-<audio id="loginSound" preload="auto">
-  <source src="/theme.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-  (() => {
-    const form = document.getElementById('loginForm');
-    const btn = document.getElementById('loginBtn');
-    const audio = document.getElementById('loginSound');
-    if (!form || !btn || !audio) return;
-
-    btn.addEventListener('click', () => {
-      audio.pause();
-      audio.currentTime = 0;
-      audio.volume = 0.9;
-
-      audio.play().catch(() => {}).finally(() => {
-        setTimeout(() => form.submit(), 3000); // dĺžka (ms)
-      });
-    });
-  })();
-</script>
 </body>
 </html>
