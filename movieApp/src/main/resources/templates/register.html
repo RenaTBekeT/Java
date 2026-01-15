@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body class="appBody">
+
+<main class="authPage">
+    <div class="authShell">
+
+        <div class="brandTop">
+            <div class="brandMark">R</div>
+            <div class="brandText">
+                <div class="brandTitle">RENDYHO DATABAZE</div>
+                <div class="brandSub">Create your account</div>
+            </div>
+        </div>
+
+        <section class="authCardX">
+            <header class="authHeadX">
+                <h1 class="authH1">Create account</h1>
+                <p class="authP">Register to start searching movies via OMDb.</p>
+            </header>
+
+            <div class="alertError" th:if="${param.error}">
+                <span class="alertTitle">Error</span>
+                <span class="alertMsg" th:text="${param.error}"></span>
+            </div>
+
+            <form class="formX" method="POST" th:action="@{/register}">
+                <div class="fieldX">
+                    <label class="labelX" for="username">Username</label>
+                    <input class="inputX"
+                           type="text"
+                           id="username"
+                           name="username"
+                           autocomplete="username"
+                           required
+                           placeholder="e.g. rendy"
+                           th:value="${param.Username}">
+                </div>
+
+                <div class="fieldX">
+                    <label class="labelX" for="password">Password</label>
+                    <input class="inputX"
+                           type="password"
+                           id="password"
+                           name="password"
+                           autocomplete="new-password"
+                           required
+                           placeholder="••••••••">
+                    <div class="hintX">This is a school app. Don’t reuse a real password.</div>
+                </div>
+
+                <button class="btnX btnPrimaryX" type="submit">Register</button>
+            </form>
+
+            <div class="authFootX">
+                <div class="mutedX">Already have an account?</div>
+                <a class="btnX btnGhostX" th:href="@{/login}">Go to login</a>
+            </div>
+        </section>
+
+        <div class="tinyFooter">
+            <span class="mutedX">©</span>
+            <span class="mutedX">Rendy</span>
+        </div>
+
+    </div>
+</main>
+
+</body>
+</html>

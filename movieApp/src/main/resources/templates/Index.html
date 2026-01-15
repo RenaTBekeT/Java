@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movies</title>
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body class="appBody">
+
+<nav class="navX">
+    <div class="navLeftX">
+        <div class="navBrandX">
+            <div class="brandMark small">R</div>
+            <div class="navBrandTextX">
+                <div class="navBrandTitleX">RENDYHO DATABAZE</div>
+                <div class="navBrandSubX">Search in OMDb</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navRightX">
+        <div class="navUserChipX">
+            <div class="navDotX"></div>
+            <span th:text="${username}">username</span>
+        </div>
+
+        <!-- zatím fake signout -->
+        <a class="btnX btnGhostX" th:href="@{/login}">Sign out</a>
+    </div>
+</nav>
+
+<main class="indexPageX">
+
+    <section class="heroX">
+        <h1 class="heroTitleX">RENDYHO DATABAZE</h1>
+        <p class="heroSubX">Search movies by name. (Later: save to your list, rating, notes.)</p>
+
+        <form class="searchX" method="GET" th:action="@{/index}">
+            <input type="hidden" name="username" th:value="${username}"/>
+
+            <div class="searchBarX">
+                <div class="searchIconX">⌕</div>
+
+                <input class="searchInputX"
+                       id="q"
+                       name="q"
+                       type="text"
+                       placeholder="Search… (try: Batman, Matrix, Inception)"
+                       th:value="${q}"/>
+
+                <button class="btnX btnPrimaryX searchBtnX" type="submit">Search</button>
+            </div>
+
+            <div class="searchMetaX">
+                <span>Tip: case/diacritics don’t matter (you normalize it in service).</span>
+            </div>
+        </form>
+
+        <div class="alertError" th:if="${error}">
+            <span class="alertTitle">Error</span>
+            <span class="alertMsg" th:text="${error}">Something went wrong</span>
+        </div>
+    </section>
+
+    <section class="panelX" th:if="${results != null}">
+        <div class="panelHeadX">
+            <h2 class="panelTitleX">Results</h2>
+            <div class="pillX" th:text="${#lists.size(results)}">0</div>
+        </div>
+
+        <div class="tableWrapX">
+            <table class="tableX">
+                <thead>
+                <tr>
+                    <th class="colPosterX">Poster</th>
+                    <th>Title</th>
+                    <th class="colYearX">Year</th>
+                    <th class="colIdX">imdb</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:if="${#lists.isEmpty(results)}">
+                    <td colspan="4" class="emptyX">No results</td>
+                </tr>
+
+                <tr th:each="m : ${results}">
+                    <td>
+                        <!-- DTO: poster -->
+                        <img th:if="${m.poster != null and m.poster != 'N/A'}"
+                             th:src="${m.poster}"
+                             alt="poster"
+                             class="posterX"/>
+
+                        <div th:if="${m.poster == null or m.poster == 'N/A'}"
+                             class="posterEmptyX">—</div>
+                    </td>
+
+                    <td class="titleCellX">
+                        <div class="titleMainX" th:text="${m.title}">Movie title</div>
+                    </td>
+
+                    <td class="yearX" th:text="${m.year}">1999</td>
+
+                    <td class="imdbX">
+                        <span class="monoX" th:text="${m.imdbId}">tt000000</span>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="panelX" th:if="${results == null}">
+        <div class="emptyStateX">
+            <div class="emptyTitleX">Start searching</div>
+            <div class="emptySubX">Type a movie name and hit Search.</div>
+        </div>
+    </section>
+
+</main>
+
+</body>
+</html>
