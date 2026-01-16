@@ -19,4 +19,7 @@ public class OmdbSearchItem {
 
     @JsonProperty("Poster")
     private String poster;
+
+    @JsonProperty("Genre")
+    private String genre;
 }

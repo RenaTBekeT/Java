@@ -55,12 +55,100 @@
         <div style="font-weight:900; line-height:1.6;"
              th:text="${m != null ? m.plot : 'No plot'}">
         </div>
+
+        <button class="btn btnRedWTDetail"
+                type="button"
+                id="trailerBtn"
+                th:attr="data-title=${m != null ? m.title : ''}">
+          Watch trailer
+        </button>
+
       </div>
 
     </div>
   </div>
 
 </div>
+
+<div id="trailerModal" class="modal" style="display:none;">
+  <div class="modalBackdrop" id="trailerBackdrop"></div>
+
+  <div class="modalCard">
+    <div class="modalTop">
+      <div class="modalTitle">Trailer</div>
+      <button class="btn btnGhost" type="button" id="trailerCloseBtn">Close</button>
+    </div>
+
+    <div class="modalBody">
+      <iframe id="trailerFrame"
+              width="100%" height="420"
+              style="border:0; border-radius:16px;"
+              allow="autoplay; encrypted-media"
+              allowfullscreen></iframe>
+
+      <div id="trailerEmpty" class="small" style="display:none; margin-top:12px;">
+        Trailer not found.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const trailerBtn = document.getElementById("trailerBtn");
+  const modal = document.getElementById("trailerModal");
+  const frame = document.getElementById("trailerFrame");
+  const empty = document.getElementById("trailerEmpty");
+  const closeBtn = document.getElementById("trailerCloseBtn");
+  const backdrop = document.getElementById("trailerBackdrop");
+
+  function openTrailer(){
+    const title = (trailerBtn?.dataset?.title || "").trim();
+    console.log("openTrailer title:", title);
+
+    if(!title){
+      empty.style.display = "block";
+      modal.style.display = "block";
+      return;
+    }
+
+    modal.style.display = "block";
+    empty.style.display = "none";
+    frame.src = ""; // reset
+
+    fetch("/api/trailer?title=" + encodeURIComponent(title))
+      .then(r => {
+        if(!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(data => {
+        console.log("trailer api response:", data);
+        if(data && data.videoId){
+          frame.src = "https://www.youtube.com/embed/" + data.videoId + "?autoplay=1";
+        } else {
+          empty.style.display = "block";
+        }
+      })
+      .catch(err => {
+        console.error("trailer fetch failed:", err);
+        empty.style.display = "block";
+      });
+  }
+
+  function closeTrailer(){
+    frame.src = ""; // stop playback
+    modal.style.display = "none";
+  }
+
+  trailerBtn.addEventListener("click", openTrailer);
+  closeBtn.addEventListener("click", closeTrailer);
+  backdrop.addEventListener("click", closeTrailer);
+
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape" && modal.style.display === "block"){
+      closeTrailer();
+    }
+  });
+</script>
 
 </body>
 </html>

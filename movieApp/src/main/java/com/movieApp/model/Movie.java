@@ -14,7 +14,8 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
-    private Integer year;
+    @Column(length = 20)
+    private String year;
     private String genre;
     @Column(unique = true)
     private String imdbId;

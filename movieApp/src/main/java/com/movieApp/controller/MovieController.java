@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import com.movieApp.service.dto.TrailerDto;
 import java.util.List;
 import java.util.Set;
 
@@ -145,5 +145,10 @@ public class MovieController {
                                              @RequestParam("imdbId") String imdbId) {
         boolean nowSaved = movieService.toggleFavourite(username, imdbId);
         return ResponseEntity.ok(nowSaved ? "saved" : "removed");
+    }
+    @GetMapping("/api/trailer")
+    @ResponseBody
+    public ResponseEntity<TrailerDto> trailer(@RequestParam("title") String title) {
+        return ResponseEntity.ok(movieService.findTrailerVideo(title));
     }
 }

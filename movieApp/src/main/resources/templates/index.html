@@ -71,9 +71,16 @@
                        style="font-weight:1000; color:white; text-decoration:none;">
                         <span th:text="${m.title}">Title</span>
                     </a>
-                    <div class="small">imdbId: <span th:text="${m.imdbId}"></span></div>
+                    <div></div>
+                    <button class="btn btnRedWTDetail"
+                            type="button"
+                            onclick="openTrailer()"
+                            th:attr="data-title=${m != null ? m.title : ''}"
+                            id="trailerBtn">
+                        Watch trailer
+                    </button>
                 </td>
-
+                </td>
                 <td style="font-weight:900;" th:text="${m.year}">Year</td>
 
                 <td>
@@ -97,7 +104,28 @@
     <span class="toastDot"></span>
     <span id="toastText">Saved</span>
 </div>
+<div id="trailerModal" class="modal" style="display:none;">
+    <div class="modalBackdrop" onclick="closeTrailer()"></div>
 
+    <div class="modalCard">
+        <div class="modalTop">
+            <div class="modalTitle">Trailer</div>
+            <button class="btn btnGhost" type="button" onclick="closeTrailer()">Close</button>
+        </div>
+
+        <div class="modalBody">
+            <iframe id="trailerFrame"
+                    width="100%" height="420"
+                    style="border:0; border-radius:16px;"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen></iframe>
+
+            <div id="trailerEmpty" class="small" style="display:none; margin-top:12px;">
+                Trailer not found.
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     function paint(btn, saved){
       btn.dataset.saved = saved ? "1" : "0";
@@ -151,6 +179,40 @@
     document.querySelectorAll("button[data-imdb][data-saved]").forEach(btn=>{
       paint(btn, btn.dataset.saved === "1");
     });
+</script>
+<script>
+function openTrailer(){
+const btn = document.getElementById("trailerBtn");
+const title = btn.dataset.title;
+
+const modal = document.getElementById("trailerModal");
+const frame = document.getElementById("trailerFrame");
+const empty = document.getElementById("trailerEmpty");
+
+modal.style.display = "block";
+empty.style.display = "none";
+frame.src = ""; // reset
+
+fetch("/api/trailer?title=" + encodeURIComponent(title))
+.then(r => r.json())
+.then(data => {
+if(data && data.videoId){
+frame.src = "https://www.youtube.com/embed/" + data.videoId + "?autoplay=1";
+} else {
+empty.style.display = "block";
+}
+})
+.catch(() => {
+empty.style.display = "block";
+});
+}
+
+function closeTrailer(){
+const modal = document.getElementById("trailerModal");
+const frame = document.getElementById("trailerFrame");
+frame.src = ""; // stop playback
+modal.style.display = "none";
+}
 </script>
 </body>
 </html>

@@ -18,6 +18,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import com.movieApp.service.dto.TrailerDto;
+import com.movieApp.service.dto.YoutubeSearchResponse;
 
 @Service
 public class MovieService {
@@ -26,6 +28,10 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final UserMovieRepository userMovieRepository;
     private final RestClient restClient;
+    private final RestClient youtubeClient;
+
+    @Value("${youtube.api.key}")
+    private String youtubeApiKey;
 
     @Value("${omdb.api.key}")
     private String omdbApiKey;
@@ -37,7 +43,9 @@ public class MovieService {
         this.usersRepository = usersRepository;
         this.movieRepository = movieRepository;
         this.userMovieRepository = userMovieRepository;
+
         this.restClient = restClientBuilder.baseUrl("https://www.omdbapi.com").build();
+        this.youtubeClient = restClientBuilder.baseUrl("https://www.googleapis.com/youtube/v3").build();
     }
 
     public User register(String username, String password) {
@@ -111,11 +119,7 @@ public class MovieService {
             movie.setDescription(d.getPlot());
             movie.setPosterUrl(d.getPoster());
 
-            try {
-                movie.setYear(Integer.parseInt(d.getYear()));
-            } catch (Exception ignored) {
-                movie.setYear(null);
-            }
+            movie.setYear(d.getYear());
 
             movieRepository.save(movie);
         }
@@ -176,7 +180,7 @@ public class MovieService {
             movie.setGenre(d.getGenre());
             movie.setDescription(d.getPlot());
             movie.setPosterUrl(d.getPoster());
-            try { movie.setYear(Integer.parseInt(d.getYear())); } catch (Exception ignored) {}
+            movie.setYear(d.getYear()); {}
 
             movieRepository.save(movie);
         }
@@ -190,5 +194,32 @@ public class MovieService {
 
         userMovieRepository.save(new UserMovie(user, movie));
         return true; // teď je to uložené
+    }
+    public TrailerDto findTrailerVideo(String movieTitle) {
+        if (movieTitle == null || movieTitle.isBlank()) return new TrailerDto(null);
+
+        // dotaz: "Title trailer" – stačí jednoduché
+        String q = movieTitle.trim() + " trailer";
+
+        YoutubeSearchResponse resp = youtubeClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/search")
+                        .queryParam("part", "snippet")
+                        .queryParam("type", "video")
+                        .queryParam("maxResults", "1")
+                        .queryParam("q", q)
+                        .queryParam("key", youtubeApiKey)
+                        .build())
+                .retrieve()
+                .body(YoutubeSearchResponse.class);
+
+        if (resp == null || resp.getItems() == null || resp.getItems().isEmpty()) {
+            return new TrailerDto(null);
+        }
+
+        var first = resp.getItems().get(0);
+        if (first == null || first.getId() == null) return new TrailerDto(null);
+
+        return new TrailerDto(first.getId().getVideoId());
     }
 }
