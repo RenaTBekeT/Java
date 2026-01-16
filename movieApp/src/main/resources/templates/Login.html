@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>Login</title>
     <link rel="stylesheet" th:href="@{/styles.css}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -15,7 +15,7 @@
             <div class="brandBig">MOVIES</div>
         </div>
         <div class="navRight">
-            <a class="btn btnGhost" th:href="@{/login}">Login</a>
+            <a class="btn btnGhost" th:href="@{/register}">Register</a>
         </div>
     </div>
 </div>
@@ -23,14 +23,14 @@
 <main class="authWrap">
     <section class="authCard">
         <div class="authHeader">
-            <div class="authKicker">Create account</div>
-            <div class="authTitle">Register</div>
-            <div class="authHint">Simple account for your local project.</div>
+            <div class="authKicker">Access</div>
+            <div class="authTitle">Login</div>
+            <div class="authHint">Enter your credentials.</div>
         </div>
 
         <div class="error" th:if="${param.error}" th:text="${param.error}"></div>
 
-        <form class="form" method="POST" th:action="@{/register}">
+        <form class="form" method="POST" th:action="@{/login}">
             <div class="field">
                 <label for="username">Username</label>
                 <input class="input"
@@ -48,16 +48,16 @@
                        id="password"
                        name="password"
                        type="password"
-                       autocomplete="new-password"
+                       autocomplete="current-password"
                        required>
             </div>
 
-            <button class="btn btnRed btnBlock" type="submit">Create account</button>
+            <button class="btn btnRed btnBlock" type="submit">Login</button>
         </form>
 
         <div class="links">
-            <span class="small">Already have an account?</span>
-            <a class="btn btnGhost" th:href="@{/login}">Go to login</a>
+            <span class="small">No account yet?</span>
+            <a class="btn btnGhost" th:href="@{/register}">Create one</a>
         </div>
     </section>
 </main>

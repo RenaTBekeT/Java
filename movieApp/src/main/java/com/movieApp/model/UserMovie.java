@@ -1,4 +1,5 @@
 package com.movieApp.model;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -6,12 +7,15 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
+@Table(name="user_movie",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id","movie_id"}))
 public class UserMovie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private Integer rating;
+
+    private Integer rating; // 1-10 nebo 1-100 podle tebe
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

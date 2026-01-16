@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Favourites</title>
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div class="navbar">
+    <div class="navInner">
+        <div class="brand">
+            <div class="brandTitle">Rendyho databáze</div>
+            <div class="brandBig">FAVOURITES</div>
+        </div>
+
+        <div class="navRight">
+            <div class="navUser" th:text="${username}">user</div>
+            <a class="btn btnGhost" th:href="@{/index(username=${username})}">Back to search</a>
+            <a class="btn btnGhost" th:href="@{/login}">Sign out</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="hero">
+        <div class="heroTitle">Your favourites</div>
+        <div class="heroSub">Saved movies for this account.</div>
+    </div>
+
+    <div class="tableWrap">
+        <table>
+            <thead>
+            <tr>
+                <th style="width:90px;">Poster</th>
+                <th>Title</th>
+                <th style="width:90px;">Year</th>
+                <th style="width:170px;"></th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr th:if="${#lists.isEmpty(myMovies)}">
+                <td colspan="4" class="small">No favourites yet.</td>
+            </tr>
+
+            <tr class="rowHover"
+                th:each="um : ${myMovies}"
+                th:attr="data-rowid=${um.id}">
+                <td>
+                    <img class="poster"
+                         th:if="${um != null and um.movie != null and um.movie.posterUrl != null and um.movie.posterUrl != 'N/A'}"
+                         th:src="${um.movie.posterUrl}" alt="poster">
+
+                    <div class="small"
+                         th:if="${um == null or um.movie == null or um.movie.posterUrl == null or um.movie.posterUrl == 'N/A'}"
+                         style="width:64px; height:96px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,.10); border-radius:14px;">
+                        —
+                    </div>
+                </td>
+
+                <td style="font-weight:1000;">
+                    <a th:href="@{/movie(username=${username}, imdbId=${um.movie.imdbId})}"
+                       style="color:inherit; text-decoration:none;">
+                        <span th:text="${um.movie.title}">Title</span>
+                    </a>
+                    <div class="small" th:text="${um.movie.imdbId}">tt...</div>
+                </td>
+
+                <td style="font-weight:900;" th:text="${um.movie.year}">Year</td>
+
+                <td>
+                    <button class="btn btnRed btnBlock"
+                            type="button"
+                            th:attr="data-umid=${um.id}"
+                            onclick="deleteFav(this)">
+                        Remove
+                    </button>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div id="toast" class="toast">
+    <span class="toastDot"></span>
+    <span id="toastText">Done</span>
+</div>
+
+<script>
+    function showToast(text){
+      const t = document.getElementById("toast");
+      const tt = document.getElementById("toastText");
+      tt.textContent = text;
+      t.classList.add("show");
+      setTimeout(()=>t.classList.remove("show"), 1600);
+    }
+
+    function deleteFav(btn){
+      const userMovieId = btn.dataset.umid;
+      btn.disabled = true;
+      btn.textContent = "Removing…";
+
+      fetch("/favourites/delete", {
+        method: "POST",
+        headers: {"Content-Type":"application/x-www-form-urlencoded"},
+        body: new URLSearchParams({
+          username: "[[${username}]]",
+          userMovieId: userMovieId
+        })
+      })
+      .then(res => {
+        if(res.ok){
+          // smaž řádek z tabulky
+          const tr = btn.closest("tr");
+          if(tr) tr.remove();
+          showToast("Removed from favourites");
+        } else {
+          btn.disabled = false;
+          btn.textContent = "Remove";
+          showToast("Failed");
+        }
+      })
+      .catch(() => {
+        btn.disabled = false;
+        btn.textContent = "Remove";
+        showToast("Failed");
+      });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rendyho databáze</title>
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="navbar">
+    <div class="navInner">
+        <div class="brand">
+            <div class="brandTitle">Rendyho databáze</div>
+            <div class="brandBig">MOVIES</div>
+        </div>
+
+        <div class="navRight">
+            <div class="navUser" th:text="${username}">user</div>
+            <a class="btn btnGhost" th:href="@{/favourites(username=${username})}">Favourites</a>
+            <a class="btn btnGhost" th:href="@{/login}">Sign out</a>
+        </div>
+    </div>
+</div>
+<div class="container">
+
+        <div class="charactersWrap" th:if="${results == null}">
+            <img src="/images/batman.png" class="heroCharacters" alt="batman">
+            <img src="/images/torreto.png" class="heroCharacters" alt="torreto">
+            <img src="/images/Punisher.png" class="punisher" alt="punishher">
+            <img src="/images/Bruce.png" class="heroCharacters" alt="bruce">
+            <img src="/images/superman.png" class="heroCharacters" alt="superman1">
+        </div>
+
+    <div class="hero">
+        <div class="heroTitle">Search OMDb</div>
+        <div class="heroSub">Type a movie name. Click title for detail. Add goes to favourites without redirect.</div>
+
+        <form class="searchRow" method="GET" th:action="@{/index}">
+            <input type="hidden" name="username" th:value="${username}">
+            <input class="input" name="q" th:value="${q}" placeholder="Search… (Batman, Matrix, Alien)">
+            <button class="btn btnRed" type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="tableWrap" th:if="${results != null}">
+        <table>
+            <thead>
+            <tr>
+                <th style="width:90px;">Poster</th>
+                <th>Title</th>
+                <th style="width:90px;">Year</th>
+                <th style="width:190px;"></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:if="${#lists.isEmpty(results)}">
+                <td colspan="4" class="small">No results.</td>
+            </tr>
+
+            <tr class="rowHover" th:each="m : ${results}">
+                <td>
+                    <img class="poster"
+                         th:if="${m.poster != null and m.poster != 'N/A'}"
+                         th:src="${m.poster}"
+                         alt="poster">
+                </td>
+
+                <td>
+                    <a th:href="@{/movie(username=${username}, imdbId=${m.imdbId})}"
+                       style="font-weight:1000; color:white; text-decoration:none;">
+                        <span th:text="${m.title}">Title</span>
+                    </a>
+                    <div class="small">imdbId: <span th:text="${m.imdbId}"></span></div>
+                </td>
+
+                <td style="font-weight:900;" th:text="${m.year}">Year</td>
+
+                <td>
+                    <button class="btn btnGreen btnBlock"
+                            type="button"
+                            th:attr="data-imdb=${m.imdbId},
+                               data-saved=${favouriteIds != null and favouriteIds.contains(m.imdbId) ? '1' : '0'}"
+                            onclick="toggleFav(this)">
+                        Add to favourites
+                    </button>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div id="toast" class="toast">
+    <span class="toastDot"></span>
+    <span id="toastText">Saved</span>
+</div>
+
+<script>
+    function paint(btn, saved){
+      btn.dataset.saved = saved ? "1" : "0";
+      btn.disabled = false;
+
+      if(saved){
+        btn.classList.add("btnOutlineGreen");
+        btn.classList.remove("btnRed");
+        btn.innerHTML = `<span class="checkCircle">✓</span> On my list`;
+      }else{
+        btn.classList.remove("btnOutlineGreen");
+        btn.classList.add("btnRed");
+        btn.textContent = "Add to my list";
+      }
+    }
+
+    function toggleFav(btn){
+      const imdbId = btn.dataset.imdb;
+      const savedNow = btn.dataset.saved === "1";
+
+      btn.disabled = true;
+      btn.textContent = savedNow ? "Removing…" : "Saving…";
+
+      fetch("/favourites/toggle", {
+        method: "POST",
+        headers: {"Content-Type":"application/x-www-form-urlencoded"},
+        body: new URLSearchParams({
+          username: "[[${username}]]",
+          imdbId: imdbId
+        })
+      })
+      .then(res => res.text())
+      .then(txt => {
+        if(txt.includes("saved")){
+          paint(btn, true);
+          showToast("Saved to favourites");
+        }else{
+          paint(btn, false);
+          showToast("Removed from favourites");
+        }
+      })
+      .catch(() => {
+        btn.disabled = false;
+        showToast("Failed");
+        // vrátíme původní vizuál
+        paint(btn, savedNow);
+      });
+    }
+
+    // při načtení stránky nastaví vzhled podle data-saved z Thymeleafu
+    document.querySelectorAll("button[data-imdb][data-saved]").forEach(btn=>{
+      paint(btn, btn.dataset.saved === "1");
+    });
+</script>
+</body>
+</html>

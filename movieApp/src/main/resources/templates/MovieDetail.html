@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie detail</title>
+  <link rel="stylesheet" th:href="@{/styles.css}"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div class="navbar">
+  <div class="navInner">
+    <div class="brand">
+      <div class="brandTitle">Rendyho databáze</div>
+      <div class="brandBig">DETAIL</div>
+    </div>
+
+    <div class="navRight">
+      <div class="navUser" th:text="${username}">user</div>
+      <a class="btn btnGhost" th:href="@{/index(username=${username})}">Back</a>
+      <a class="btn btnGhost" th:href="@{/favourites(username=${username})}">Favourites</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="hero">
+    <div class="heroTitle" th:text="${m != null ? m.title : 'Not found'}">Title</div>
+    <div class="heroSub">
+      <span th:text="${m != null ? m.year : ''}"></span>
+      <span th:if="${m != null and m.genre != null}" style="margin-left:10px;" th:text="${m.genre}"></span>
+    </div>
+  </div>
+
+  <div class="tableWrap" style="padding:18px; border-radius:22px;">
+    <div style="display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap;">
+
+      <div style="width:180px;">
+        <img class="poster" style="width:180px; height:260px;"
+             th:if="${m != null and m.poster != null and m.poster != 'N/A'}"
+             th:src="${m.poster}" alt="poster">
+        <div class="small"
+             th:if="${m == null or m.poster == null or m.poster == 'N/A'}"
+             style="width:180px; height:260px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,.10); border-radius:16px;">
+          No poster
+        </div>
+      </div>
+
+      <div style="flex:1; min-width:260px;">
+        <div class="small" style="margin-bottom:10px;">
+          imdbId: <span th:text="${m != null ? m.imdbId : ''}"></span>
+        </div>
+
+        <div style="font-weight:900; line-height:1.6;"
+             th:text="${m != null ? m.plot : 'No plot'}">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

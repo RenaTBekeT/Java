@@ -16,13 +16,12 @@ public class Movie {
     private String title;
     private Integer year;
     private String genre;
+    @Column(unique = true)
+    private String imdbId;
 
     @Column(length = 1000)
     private String description;
     private String posterUrl;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
 
     public Movie(String title) {
         this.title = title;
